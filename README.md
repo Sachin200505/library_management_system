@@ -22,6 +22,13 @@ Matches the required layout: apps `accounts`, `books`, `transactions`; templates
 5) **Superuser**: `python manage.py createsuperuser` (for Admin role, set profile role to ADMIN via admin site or shell).
 6) **Run**: `python manage.py runserver` then visit `http://127.0.0.1:8000/`.
 
+## Deploy on Vercel (Docker)
+1) Ensure `DJANGO_DEBUG=False` and add your Vercel hostname to `DJANGO_ALLOWED_HOSTS` in `.env` or project env vars.
+2) Vercel picks up `vercel.json` + `Dockerfile`; it builds the image and runs `gunicorn`.
+3) Set env vars in Vercel: `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `SUPABASE_DB_*`, `SUPABASE_SSL_MODE=require`, `DJANGO_SESSION_AGE`, etc.
+4) After first deploy, run `python manage.py migrate` (via Vercel CLI/shell). Optionally seed data: `python manage.py shell < scripts/seed_books.py`.
+5) Static files are served by WhiteNoise; collectstatic runs during the Docker build.
+
 ## Database Notes (Supabase Postgres)
 - The app uses Django ORM; configure connection via `SUPABASE_DB_*` variables.
 - Tables: Users (Django auth), UserProfile, Author, Category, Book, BookIssue, Fine. Foreign keys enforce relationships and normalization.
