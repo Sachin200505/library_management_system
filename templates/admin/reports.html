@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Reports & Analytics{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Insights</span>
+    <h3 class="mb-0">Reports & Analytics</h3>
+  </div>
+  <span class="badge-soft">Auto-updated</span>
+</div>
+
+<div class="stat-grid mb-4">
+  <div class="stat-card animate-fade-in">
+    <div class="icon"><i class="bi bi-cash-coin"></i></div>
+    <p class="mini-label mb-1">Fines Collected</p>
+    <h3>{{ report.fines }}</h3>
+  </div>
+  <div class="stat-card animate-fade-in" style="animation-delay:.05s;">
+    <div class="icon"><i class="bi bi-exclamation-triangle"></i></div>
+    <p class="mini-label mb-1">Overdue</p>
+    <h3>{{ report.overdue }}</h3>
+  </div>
+  <div class="stat-card animate-fade-in" style="animation-delay:.1s;">
+    <div class="icon"><i class="bi bi-box-arrow-up-right"></i></div>
+    <p class="mini-label mb-1">Issued</p>
+    <h3>{{ report.issued }}</h3>
+  </div>
+  <div class="stat-card animate-fade-in" style="animation-delay:.15s;">
+    <div class="icon"><i class="bi bi-people"></i></div>
+    <p class="mini-label mb-1">Students</p>
+    <h3>{{ report.students }}</h3>
+  </div>
+</div>
+
+<div class="card-modern card-ghost">
+  <div class="card-header">Issued Books</div>
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0">
+      <thead><tr><th>Book</th><th>User</th><th>Issue Date</th><th>Due</th></tr></thead>
+      <tbody>
+        {% for issue in issued %}
+        <tr><td>{{ issue.book.title }}</td><td>{{ issue.user.username }}</td><td>{{ issue.issue_date }}</td><td>{{ issue.due_date }}</td></tr>
+        {% empty %}<tr><td colspan="4" class="text-center text-muted">No data.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

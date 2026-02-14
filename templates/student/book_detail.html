@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Book Details{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card-modern card-ghost h-100">
+      <div class="card-body">
+        <p class="mini-label mb-1">{{ book.category }}</p>
+        <h3 class="mb-1">{{ book.title }}</h3>
+        <p class="text-muted">By {{ book.author.name }}</p>
+        <p>{{ book.description|default:'No description available.' }}</p>
+        <p class="fw-semibold mb-0">Available: {{ book.available_count }} / {{ book.quantity }}</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="card-modern card-ghost h-100">
+      <div class="card-body">
+        <p class="mb-1">ISBN: {{ book.isbn }}</p>
+        <p class="mb-1">Published: {{ book.published_year|default:'-' }}</p>
+        {% if user.is_authenticated and user.profile.role == 'STUDENT' and book.is_available %}
+          <a class="btn btn-gradient w-100" href="{% url 'transactions:request-issue-book' book.id %}">Request Issue</a>
+        {% else %}
+          <button class="btn btn-outline-dark w-100" disabled>Request Unavailable</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

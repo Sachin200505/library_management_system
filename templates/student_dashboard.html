@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-3">Student Dashboard</h3>
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header">Latest Books</div>
+            <div class="card-body">
+                {% for book in latest_books %}
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <div>
+                            <div class="fw-bold">{{ book.title }}</div>
+                            <div class="text-muted small">{{ book.author.name }} &middot; {{ book.category }}</div>
+                        </div>
+                        <div>
+                            {% if book.is_available %}
+                                <span class="badge bg-success">Available</span>
+                            {% else %}
+                                <span class="badge bg-danger">Out</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No books yet.</p>
+                {% endfor %}
+                <a href="/books/" class="btn btn-link mt-2">Browse all books</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header">My Issues</div>
+            <div class="card-body">
+                {% for issue in my_issues %}
+                    <div class="border-bottom py-2 d-flex justify-content-between">
+                        <div>
+                            <div class="fw-semibold">{{ issue.book.title }}</div>
+                            <div class="small text-muted">Status: {{ issue.status }} | Due: {{ issue.due_date|default:'-' }}</div>
+                        </div>
+                        {% if issue.is_overdue %}
+                            <span class="badge bg-danger">Overdue</span>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="text-muted">No issued books yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

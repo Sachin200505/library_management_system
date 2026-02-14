@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="mb-4">Admin Dashboard</h3>
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card bg-gradient-orange text-white">
+            <div class="card-body">
+                <div class="fw-bold">Total Books</div>
+                <div class="display-6">{{ stats.total_books }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-gradient-orange text-white">
+            <div class="card-body">
+                <div class="fw-bold">Issued</div>
+                <div class="display-6">{{ stats.issued_books }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-gradient-orange text-white">
+            <div class="card-body">
+                <div class="fw-bold">Students</div>
+                <div class="display-6">{{ stats.students }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-gradient-orange text-white">
+            <div class="card-body">
+                <div class="fw-bold">Overdue</div>
+                <div class="display-6">{{ stats.overdue }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Recent Requests</span>
+        <a class="btn btn-sm btn-orange" href="/transactions/admin/requests/">View All</a>
+    </div>
+    <div class="card-body table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr><th>Book</th><th>User</th><th>Status</th><th>Requested</th></tr>
+            </thead>
+            <tbody>
+            {% for req in recent_requests %}
+                <tr>
+                    <td>{{ req.book.title }}</td>
+                    <td>{{ req.user.username }}</td>
+                    <td><span class="badge bg-secondary">{{ req.status }}</span></td>
+                    <td>{{ req.created_at|date:'Y-m-d H:i' }}</td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="4" class="text-center text-muted">No requests yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

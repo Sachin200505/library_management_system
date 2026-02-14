@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}Issued Books{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Circulation</span>
+    <h3 class="mb-0">Issued Books</h3>
+  </div>
+  <span class="badge-soft">Return handling</span>
+</div>
+
+<div class="card-modern card-ghost">
+    <div class="card-body table-responsive table-modern">
+        <table class="table table-modern-striped align-middle mb-0">
+            <thead><tr><th>Book</th><th>User</th><th>Issue Date</th><th>Due</th><th>Status</th><th class="text-end">Action</th></tr></thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr class="{% if issue.is_overdue %}table-warning{% endif %}">
+                    <td>{{ issue.book.title }}</td>
+                    <td>{{ issue.user.username }}</td>
+                    <td>{{ issue.issue_date|default:'-' }}</td>
+                    <td>{{ issue.due_date|default:'-' }}</td>
+                    <td>{% if issue.is_overdue %}<span class="badge badge-status badge-overdue">Overdue</span>{% else %}<span class="badge badge-status badge-issued">{{ issue.status }}</span>{% endif %}</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-gradient" href="{% url 'transactions:return-issue' issue.id %}" data-confirm="Mark as returned?">Mark Returned</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6" class="text-center text-muted">No issued books.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

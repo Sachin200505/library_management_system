@@ -1,0 +1,10 @@
+{% if messages %}
+<div class="toast-stack">
+  {% for message in messages %}
+  <div class="toast-card {% if 'error' in message.tags %}error{% elif 'success' in message.tags %}success{% endif %}" data-auto-dismiss="4800">
+    <i class="bi {% if 'error' in message.tags %}bi-x-circle-fill text-danger{% elif 'success' in message.tags %}bi-check-circle-fill text-success{% else %}bi-info-circle-fill text-primary{% endif %}"></i>
+    <div>{{ message }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}

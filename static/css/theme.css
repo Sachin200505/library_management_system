@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary-orange: #ff7a18;
+  --secondary-orange: #ffb347;
+  --accent-orange: #ff9800;
+  --dark-bg: #0f172a;
+  --soft-bg: #fff7ed;
+  --card-bg: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #475569;
+  --text-light: #f8fafc;
+  --border-subtle: #e2e8f0;
+  --glass: rgba(255, 255, 255, 0.08);
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --shadow-soft: 0 10px 40px rgba(15, 23, 42, 0.12);
+  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.12);
+  --gradient: linear-gradient(135deg, #ff7a18, #ffb347);
+  --gradient-soft: linear-gradient(135deg, rgba(255, 122, 24, 0.12), rgba(255, 179, 71, 0.12));
+  --gradient-dark: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.82));
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: 'Poppins', 'Space Grotesk', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at 10% 20%, rgba(255, 122, 24, 0.08), rgba(15, 23, 42, 0.05) 32%, #f7f8fb 70%);
+  color: var(--text-dark);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--primary-orange); text-decoration: none; }
+a:hover { color: #e36812; }
+
+img { max-width: 100%; height: auto; }
+
+.bg-soft { background: var(--soft-bg); }
+.bg-dark-surface { background: var(--dark-bg); color: var(--text-light); }
+
+.container-narrow { max-width: 1080px; margin: 0 auto; }
+
+.text-muted-soft { color: var(--text-muted); }
+
+.shadow-soft { box-shadow: var(--shadow-soft); }
+
+.glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.35); }
+
+.gradient-surface { background: var(--gradient-soft); border-radius: var(--radius-lg); }
+
+.section-title { font-weight: 700; letter-spacing: -0.01em; }
+
+.badge-dot { position: relative; padding-left: 18px; }
+.badge-dot::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; position: absolute; left: 6px; top: 50%; transform: translateY(-50%); }

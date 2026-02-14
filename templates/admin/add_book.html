@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Add / Edit Book{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Books</span>
+    <h3 class="mb-0">{{ title }}</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body">
+    <form method="post" data-loading>
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.isbn }}
+            <label>ISBN</label>
+            {% for error in form.isbn.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.title }}
+            <label>Title</label>
+            {% for error in form.title.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.author_name }}
+            <label>Author (type to add)</label>
+            {% for error in form.author_name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.category }}
+            <label>Category (choose existing or Other)</label>
+            {% for error in form.category.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6" id="new-category-wrap">
+          <div class="form-floating-modern">
+            {{ form.new_category }}
+            <label>Or add new category</label>
+            {% for error in form.new_category.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.quantity }}
+            <label>Quantity</label>
+            {% for error in form.quantity.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.available_count }}
+            <label>Available</label>
+            {% for error in form.available_count.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating-modern">
+            {{ form.published_year }}
+            <label>Published Year</label>
+            {% for error in form.published_year.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="form-floating-modern">
+            {{ form.description }}
+            <label>Description</label>
+            {% for error in form.description.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-gradient mt-3" type="submit">Save</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+(function(){
+  const select = document.getElementById('id_category');
+  const newCatWrap = document.getElementById('new-category-wrap');
+  function toggleNewCat(){
+    if (!select) return;
+    const show = select.value === '__other__';
+    newCatWrap.style.display = show ? 'block' : 'none';
+  }
+  toggleNewCat();
+  select?.addEventListener('change', toggleNewCat);
+})();
+</script>
+{% endblock %}

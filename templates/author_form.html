@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+    <div class="title-block">
+        <span class="kicker">Catalog</span>
+        <h3 class="mb-0">Authors</h3>
+    </div>
+</div>
+<div class="row g-3">
+    <div class="col-md-5">
+        <div class="card-modern card-ghost h-100">
+            <div class="card-body">
+                <form method="post" data-loading>
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        <div class="form-floating-modern">
+                            {{ field }}
+                            <label>{{ field.label }}</label>
+                            {% for error in field.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                        </div>
+                    {% endfor %}
+                    <button class="btn btn-gradient" type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="card-modern card-ghost h-100">
+            <div class="card-body table-responsive table-modern">
+                <table class="table table-modern-striped align-middle mb-0">
+                    <thead><tr><th>Name</th><th>Bio</th></tr></thead>
+                    <tbody>
+                        {% for author in authors %}
+                        <tr><td>{{ author.name }}</td><td>{{ author.bio|truncatechars:80 }}</td></tr>
+                        {% empty %}
+                        <tr><td colspan="2" class="text-center text-muted">No authors.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

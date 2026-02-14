@@ -1,0 +1,29 @@
+<aside class="sidebar">
+  <div class="brand">
+    <span class="dot"></span>
+    <div>
+      <div>LibraFlow</div>
+      <small class="text-white-50">Library Suite</small>
+    </div>
+  </div>
+  {% if user.is_authenticated and user.profile.role == 'ADMIN' %}
+    <div class="nav-section">Admin</div>
+    <nav class="nav flex-column">
+      <a class="nav-link {% if request.path == '/admin-dashboard/' %}active{% endif %}" href="{% url 'accounts:admin-dashboard' %}"><i class="bi bi-grid-1x2"></i><span>Dashboard</span></a>
+      <a class="nav-link {% if '/books/admin/manage' in request.path %}active{% endif %}" href="{% url 'books:manage-books' %}"><i class="bi bi-journal-text"></i><span>Manage Books</span></a>
+      <a class="nav-link {% if '/transactions/admin/requests' in request.path %}active{% endif %}" href="{% url 'transactions:issue-requests' %}"><i class="bi bi-inbox"></i><span>Issue Requests</span></a>
+      <a class="nav-link {% if '/transactions/admin/issued' in request.path %}active{% endif %}" href="{% url 'transactions:issued-books' %}"><i class="bi bi-box-arrow-up-right"></i><span>Issued</span></a>
+      <a class="nav-link {% if '/transactions/reports' in request.path %}active{% endif %}" href="{% url 'transactions:reports' %}"><i class="bi bi-graph-up"></i><span>Reports</span></a>
+      <a class="nav-link {% if '/admin/students' in request.path %}active{% endif %}" href="{% url 'accounts:manage-students' %}"><i class="bi bi-people"></i><span>Students</span></a>
+    </nav>
+  {% elif user.is_authenticated and user.profile.role == 'STUDENT' %}
+    <div class="nav-section">Student</div>
+    <nav class="nav flex-column">
+      <a class="nav-link {% if request.path == '/student-dashboard/' %}active{% endif %}" href="{% url 'accounts:student-dashboard' %}"><i class="bi bi-house"></i><span>Dashboard</span></a>
+      <a class="nav-link {% if request.path == '/books/' %}active{% endif %}" href="{% url 'books:list' %}"><i class="bi bi-collection"></i><span>Browse</span></a>
+      <a class="nav-link {% if '/transactions/request' in request.path %}active{% endif %}" href="{% url 'transactions:request-issue' %}"><i class="bi bi-plus-circle"></i><span>Request Issue</span></a>
+      <a class="nav-link {% if '/transactions/my-issues' in request.path %}active{% endif %}" href="{% url 'transactions:my-issues' %}"><i class="bi bi-journal-check"></i><span>My Issues</span></a>
+      <a class="nav-link {% if '/transactions/fines' in request.path %}active{% endif %}" href="{% url 'transactions:fines' %}"><i class="bi bi-cash-coin"></i><span>Fines</span></a>
+    </nav>
+  {% endif %}
+</aside>

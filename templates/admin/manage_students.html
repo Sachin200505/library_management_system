@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Manage Students{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Directory</span>
+    <h3 class="mb-0">Manage Students</h3>
+  </div>
+  <input class="form-control w-auto" placeholder="Search students" data-search-input data-search-target=".student-row" />
+</div>
+
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0">
+      <thead><tr><th>Username</th><th>Name</th><th>Role</th><th>Joined</th></tr></thead>
+      <tbody>
+        {% for student in students %}
+        <tr class="student-row" data-search-value="{{ student.user.username }} {{ student.user.first_name }} {{ student.user.last_name }} {{ student.role }}">
+          <td>{{ student.user.username }}</td>
+          <td>{{ student.user.first_name }} {{ student.user.last_name }}</td>
+          <td><span class="badge-soft">{{ student.role }}</span></td>
+          <td>{{ student.created_at|date:'Y-m-d' }}</td>
+        </tr>
+        {% empty %}<tr><td colspan="4" class="text-center text-muted">No students yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

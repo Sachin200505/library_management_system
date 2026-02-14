@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Requests</span>
+    <h3 class="mb-0">Issue Requests</h3>
+  </div>
+  <span class="badge-soft">Queue</span>
+</div>
+
+<div class="card-modern card-ghost">
+    <div class="card-body table-responsive table-modern">
+        <table class="table table-modern-striped align-middle mb-0">
+            <thead><tr><th>Book</th><th>User</th><th>Requested</th><th class="text-end">Actions</th></tr></thead>
+            <tbody>
+                {% for req in requests %}
+                <tr>
+                    <td>{{ req.book.title }}</td>
+                    <td>{{ req.user.username }}</td>
+                    <td>{{ req.created_at|date:'Y-m-d H:i' }}</td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-gradient" href="{% url 'transactions:approve-issue' req.id %}">Approve</a>
+                        <a class="btn btn-sm btn-outline-dark" href="{% url 'transactions:reject-issue' req.id %}">Reject</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="text-center text-muted">No pending requests.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

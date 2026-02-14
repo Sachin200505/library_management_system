@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Fines & Dues{% endblock %}
+{% block content %}
+<h4 class="mb-3">Fines & Due Status</h4>
+<div class="card hover-lift">
+  <div class="card-body table-responsive">
+    <table class="table align-middle">
+      <thead><tr><th>Book</th><th>Status</th><th>Due Date</th><th>Fine (calculated)</th></tr></thead>
+      <tbody>
+        {% for issue in issues %}
+        <tr>
+          <td>{{ issue.book.title }}</td>
+          <td>{{ issue.status }}</td>
+          <td>{{ issue.due_date|default:'-' }}</td>
+          <td>{% if issue.fine %}{{ issue.fine.amount }}{% elif issue.is_overdue %}{{ issue.compute_fine }}{% else %}-{% endif %}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center text-muted">No fines.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

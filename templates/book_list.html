@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+    <div class="title-block">
+        <span class="kicker">Catalog</span>
+        <h3 class="mb-0">Books</h3>
+    </div>
+    {% if user.is_authenticated and user.profile.role == 'ADMIN' %}
+    <a class="btn btn-gradient" href="{% url 'books:create-book' %}"><i class="bi bi-plus-circle me-1"></i>Add Book</a>
+    {% endif %}
+</div>
+
+<form class="card-modern card-ghost mb-3" method="get">
+    <div class="card-body row g-2 align-items-center">
+        <div class="col-md-5">
+            <div class="form-floating-modern">
+                <input type="text" name="q" value="{{ query }}" class="form-control" placeholder=" ">
+                <label>Search by title or author</label>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-floating-modern">
+                <select name="category" class="form-select" aria-label="Category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                        <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.name }}</option>
+                    {% endfor %}
+                </select>
+                <label>Filter by category</label>
+            </div>
+        </div>
+        <div class="col-md-3 d-grid">
+            <button class="btn btn-gradient" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+<div class="row g-3">
+    {% for book in page_obj %}
+    <div class="col-md-4">
+        <div class="card-modern card-ghost h-100 animate-fade-in">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="card-text text-muted small mb-1">{{ book.author.name }} · {{ book.category }}</p>
+                <p class="small flex-grow-1">{{ book.description|truncatechars:120 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    {% if book.is_available %}
+                        <span class="badge badge-status badge-available">Available</span>
+                    {% else %}
+                        <span class="badge badge-status badge-overdue">Unavailable</span>
+                    {% endif %}
+                    {% if user.is_authenticated and user.profile.role == 'STUDENT' and book.is_available %}
+                        <a class="btn btn-gradient btn-sm" href="{% url 'transactions:request-issue-book' book.id %}">Request</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-muted">No books found.</p>
+    {% endfor %}
+</div>
+
+<nav class="mt-3">
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+        {% endif %}
+        <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}
