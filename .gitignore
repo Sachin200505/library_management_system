@@ -8,6 +8,7 @@ __pycache__/
 
 # Environment
 .env
+.env.production
 .venv/
 venv/
 
@@ -20,3 +21,5 @@ media/
 .idea/
 .DS_Store
 Thumbs.db
+.vercel
+.env*.local
