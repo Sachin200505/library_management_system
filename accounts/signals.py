@@ -56,5 +56,5 @@ def assign_role_group(sender, instance, **kwargs):
     sync_user_role_group(instance)
 
 
-# Ensure groups exist at startup.
-ensure_default_groups()
+# Do not auto-create groups at import time to avoid hitting the database during
+# management commands (e.g., collectstatic) when migrations might not be applied.
