@@ -73,19 +73,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'library_management_system.wsgi.application'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('SUPABASE_DB_NAME', 'postgres'),
-        'USER': os.environ.get('SUPABASE_DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('SUPABASE_DB_PASSWORD', ''),
-        'HOST': os.environ.get('SUPABASE_DB_HOST', 'localhost'),
-        'PORT': os.environ.get('SUPABASE_DB_PORT', '5432'),
-        'OPTIONS': {
-            'sslmode': os.environ.get('SUPABASE_SSL_MODE', 'require'),
-        },
+_supabase_host = os.environ.get('SUPABASE_DB_HOST')
+if _supabase_host:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('SUPABASE_DB_NAME', 'postgres'),
+            'USER': os.environ.get('SUPABASE_DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('SUPABASE_DB_PASSWORD', ''),
+            'HOST': _supabase_host,
+            'PORT': os.environ.get('SUPABASE_DB_PORT', '5432'),
+            'OPTIONS': {
+                'sslmode': os.environ.get('SUPABASE_SSL_MODE', 'require'),
+            },
+        }
     }
-}
+else:
+    # Fallback during build/collectstatic when Supabase env vars are unavailable
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
