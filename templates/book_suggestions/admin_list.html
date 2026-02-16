@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Book Suggestions{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Admin</span>
+    <h3 class="mb-0">Book Suggestions</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Status</th><th>Requested By</th><th>Updated</th><th></th></tr></thead>
+      <tbody>
+        {% for s in suggestions %}
+        <tr>
+          <td data-label="Title">{{ s.title }}</td>
+          <td data-label="Author">{{ s.author }}</td>
+          <td data-label="Category">{{ s.category }}</td>
+          <td data-label="Status"><span class="badge-status badge-soft">{{ s.get_status_display }}</span></td>
+          <td data-label="Requested By">{{ s.created_by.username }}</td>
+          <td data-label="Updated">{{ s.updated_at|date:'Y-m-d H:i' }}</td>
+          <td class="text-end"><a class="btn btn-outline-dark btn-sm" href="{% url 'book_suggestions:update-status' s.id %}">Review</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center text-muted">No suggestions.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -29,6 +29,16 @@ INSTALLED_APPS = [
     'accounts',
     'books',
     'transactions',
+    'book_suggestions',
+    'notifications',
+    'reservations',
+    'reviews',
+    'analytics',
+    'reports',
+    'profile',
+    'system_settings',
+    'return_extensions',
+    'fine_payments',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'notifications.context_processors.unread_count',
             ],
         },
     },

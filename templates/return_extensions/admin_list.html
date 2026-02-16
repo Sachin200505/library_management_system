@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Extension Requests{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Admin</span>
+    <h3 class="mb-0">Extension Requests</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Book</th><th>User</th><th>Days</th><th>Status</th><th>Requested</th><th></th></tr></thead>
+      <tbody>
+        {% for r in requests %}
+        <tr>
+          <td data-label="Book">{{ r.issue.book.title }}</td>
+          <td data-label="User">{{ r.user.username }}</td>
+          <td data-label="Days">{{ r.days_requested }}</td>
+          <td data-label="Status"><span class="badge-status badge-soft">{{ r.get_status_display }}</span></td>
+          <td data-label="Requested">{{ r.created_at|date:'Y-m-d H:i' }}</td>
+          <td class="text-end" data-label="Actions">
+            {% if r.status == 'PENDING' %}
+            <a class="btn btn-gradient btn-sm" href="{% url 'return_extensions:approve' r.id %}">Approve</a>
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'return_extensions:reject' r.id %}">Reject</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center text-muted">No requests.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

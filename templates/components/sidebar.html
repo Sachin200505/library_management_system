@@ -16,6 +16,14 @@
         <a class="nav-link {% if '/transactions/admin/issued' in request.path %}active{% endif %}" href="{% url 'transactions:issued-books' %}"><i class="bi bi-box-arrow-up-right"></i><span>Issued</span></a>
         <a class="nav-link {% if '/transactions/reports' in request.path %}active{% endif %}" href="{% url 'transactions:reports' %}"><i class="bi bi-graph-up"></i><span>Reports</span></a>
         <a class="nav-link {% if '/admin/students' in request.path %}active{% endif %}" href="{% url 'accounts:manage-students' %}"><i class="bi bi-people"></i><span>Students</span></a>
+        <a class="nav-link {% if '/suggestions/admin' in request.path %}active{% endif %}" href="{% url 'book_suggestions:admin-list' %}"><i class="bi bi-lightbulb"></i><span>Suggestions</span></a>
+        <a class="nav-link {% if '/reservations/admin' in request.path %}active{% endif %}" href="{% url 'reservations:admin-list' %}"><i class="bi bi-calendar2-event"></i><span>Reservations</span></a>
+        <a class="nav-link {% if '/reviews/admin' in request.path %}active{% endif %}" href="{% url 'reviews:admin-list' %}"><i class="bi bi-star"></i><span>Reviews</span></a>
+        <a class="nav-link {% if '/analytics/dashboard' in request.path %}active{% endif %}" href="{% url 'analytics:dashboard' %}"><i class="bi bi-activity"></i><span>Analytics</span></a>
+        <a class="nav-link {% if '/reports' in request.path %}active{% endif %}" href="{% url 'reports:home' %}"><i class="bi bi-file-earmark-arrow-down"></i><span>Exports</span></a>
+        <a class="nav-link {% if '/settings' in request.path %}active{% endif %}" href="{% url 'system_settings:settings' %}"><i class="bi bi-gear"></i><span>Settings</span></a>
+        <a class="nav-link {% if '/return-extensions/admin' in request.path %}active{% endif %}" href="{% url 'return_extensions:admin-list' %}"><i class="bi bi-clock-history"></i><span>Extensions</span></a>
+        <a class="nav-link {% if '/fine-payments/admin' in request.path %}active{% endif %}" href="{% url 'fine_payments:admin-list' %}"><i class="bi bi-credit-card"></i><span>Fine Payments</span></a>
       </nav>
     {% elif user.is_authenticated and user.profile.role == 'STUDENT' %}
       <div class="nav-section">Student</div>
@@ -25,6 +33,11 @@
         <a class="nav-link {% if '/transactions/request' in request.path %}active{% endif %}" href="{% url 'transactions:request-issue' %}"><i class="bi bi-plus-circle"></i><span>Request Issue</span></a>
         <a class="nav-link {% if '/transactions/my-issues' in request.path %}active{% endif %}" href="{% url 'transactions:my-issues' %}"><i class="bi bi-journal-check"></i><span>My Issues</span></a>
         <a class="nav-link {% if '/transactions/fines' in request.path %}active{% endif %}" href="{% url 'transactions:fines' %}"><i class="bi bi-cash-coin"></i><span>Fines</span></a>
+        <a class="nav-link {% if '/suggestions' in request.path %}active{% endif %}" href="{% url 'book_suggestions:my-suggestions' %}"><i class="bi bi-lightbulb"></i><span>Suggest Book</span></a>
+        <a class="nav-link {% if '/reservations' in request.path %}active{% endif %}" href="{% url 'reservations:my-reservations' %}"><i class="bi bi-calendar2-event"></i><span>Reservations</span></a>
+        <a class="nav-link {% if '/return-extensions' in request.path %}active{% endif %}" href="{% url 'return_extensions:my-extensions' %}"><i class="bi bi-clock-history"></i><span>Extensions</span></a>
+        <a class="nav-link {% if '/fine-payments/my' in request.path %}active{% endif %}" href="{% url 'fine_payments:my-payments' %}"><i class="bi bi-credit-card"></i><span>Payments</span></a>
+        <a class="nav-link {% if '/profile' in request.path %}active{% endif %}" href="{% url 'profile:dashboard' %}"><i class="bi bi-person"></i><span>Profile</span></a>
       </nav>
     {% endif %}
   </div>

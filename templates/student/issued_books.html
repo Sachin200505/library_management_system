@@ -11,7 +11,7 @@
 <div class="card-modern card-ghost">
   <div class="card-body table-responsive table-modern">
     <table class="table table-modern-striped align-middle mb-0 table-stack">
-      <thead><tr><th>Book</th><th>Status</th><th>Issue</th><th>Due</th><th>Return</th><th>Fine</th></tr></thead>
+      <thead><tr><th>Book</th><th>Status</th><th>Issue</th><th>Due</th><th>Return</th><th>Fine</th><th></th></tr></thead>
       <tbody>
         {% for issue in issues %}
         <tr class="{% if issue.is_overdue %}table-warning{% endif %}">
@@ -23,9 +23,15 @@
           <td data-label="Fine">
             {% if issue.fine %}{{ issue.fine.amount }}{% elif issue.is_overdue %}{{ issue.compute_fine }}{% else %}-{% endif %}
           </td>
+          <td data-label="Actions" class="text-end">
+            {% if issue.status == 'ISSUED' %}
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'return_extensions:request' issue.id %}">Extend</a>
+            {% endif %}
+            <a class="btn btn-soft-orange btn-sm" href="{% url 'reviews:submit' issue.book.id %}">Review</a>
+          </td>
         </tr>
         {% empty %}
-        <tr><td colspan="6" class="text-center text-muted">No issues yet.</td></tr>
+        <tr><td colspan="7" class="text-center text-muted">No issues yet.</td></tr>
         {% endfor %}
       </tbody>
     </table>

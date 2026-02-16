@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}My Reviews{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Reviews</span>
+    <h3 class="mb-0">My Reviews</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Book</th><th>Rating</th><th>Status</th><th>Updated</th></tr></thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td data-label="Book">{{ r.book.title }}</td>
+          <td data-label="Rating">{{ r.rating }} / 5</td>
+          <td data-label="Status"><span class="badge-status badge-soft">{{ r.get_status_display }}</span></td>
+          <td data-label="Updated">{{ r.updated_at|date:'Y-m-d H:i' }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center text-muted">No reviews yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Return Extensions{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Extensions</span>
+    <h3 class="mb-0">Return Extensions</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost mb-3">
+  <div class="card-header">Eligible Issues</div>
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Book</th><th>Due Date</th><th></th></tr></thead>
+      <tbody>
+        {% for i in issues %}
+        <tr>
+          <td data-label="Book">{{ i.book.title }}</td>
+          <td data-label="Due Date">{{ i.due_date|default:'-' }}</td>
+          <td class="text-end" data-label="Actions"><a class="btn btn-outline-dark btn-sm" href="{% url 'return_extensions:request' i.id %}">Request</a></td>
+        </tr>
+        {% empty %}<tr><td colspan="3" class="text-center text-muted">No active issues.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-header">My Requests</div>
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Book</th><th>Days</th><th>Status</th><th>Updated</th></tr></thead>
+      <tbody>
+        {% for r in requests %}
+        <tr>
+          <td data-label="Book">{{ r.issue.book.title }}</td>
+          <td data-label="Days">{{ r.days_requested }}</td>
+          <td data-label="Status"><span class="badge-status badge-soft">{{ r.get_status_display }}</span></td>
+          <td data-label="Updated">{{ r.processed_at|default:r.created_at|date:'Y-m-d H:i' }}</td>
+        </tr>
+        {% empty %}<tr><td colspan="4" class="text-center text-muted">No requests.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

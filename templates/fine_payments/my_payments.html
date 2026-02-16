@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}My Payments{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Fines</span>
+    <h3 class="mb-0">My Payments</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Book</th><th>Amount</th><th>Status</th><th>Reference</th><th>Date</th></tr></thead>
+      <tbody>
+        {% for p in payments %}
+        <tr>
+          <td data-label="Book">{{ p.fine.issue.book.title }}</td>
+          <td data-label="Amount">{{ p.amount }}</td>
+          <td data-label="Status">{{ p.get_status_display }}</td>
+          <td data-label="Reference">{{ p.reference }}</td>
+          <td data-label="Date">{{ p.created_at|date:'Y-m-d H:i' }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">No payments yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

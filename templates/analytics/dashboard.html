@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Analytics</span>
+    <h3 class="mb-0">Dashboard</h3>
+  </div>
+</div>
+<div class="stat-grid mb-3">
+  <div class="stat-card">
+    <div class="icon"><i class="bi bi-people"></i></div>
+    <p class="text-muted small mb-1">Active Students</p>
+    <h3>{{ active_users }}</h3>
+  </div>
+  <div class="stat-card">
+    <div class="icon"><i class="bi bi-cash-coin"></i></div>
+    <p class="text-muted small mb-1">Fines Collected</p>
+    <h3>{{ fines }}</h3>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-lg-6">
+    <div class="card-modern card-ghost">
+      <div class="card-header">Most Issued Books</div>
+      <div class="card-body"><canvas id="topBooksChart"></canvas></div>
+    </div>
+  </div>
+  <div class="col-lg-6">
+    <div class="card-modern card-ghost">
+      <div class="card-header">Monthly Issues</div>
+      <div class="card-body"><canvas id="monthlyChart"></canvas></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const topBooks = {{ top_books|safe }};
+  const monthly = {{ monthly|safe }};
+  new Chart(document.getElementById('topBooksChart'), {
+    type: 'bar',
+    data: {
+      labels: topBooks.map(b => b.book__title),
+      datasets: [{ label: 'Issues', data: topBooks.map(b => b.count), backgroundColor: '#f97316' }]
+    },
+    options: { responsive: true }
+  });
+  new Chart(document.getElementById('monthlyChart'), {
+    type: 'line',
+    data: {
+      labels: monthly.map(m => new Date(m.month).toLocaleDateString()),
+      datasets: [{ label: 'Issues', data: monthly.map(m => m.count), borderColor: '#f97316', tension: 0.3 }]
+    },
+    options: { responsive: true }
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Request Extension{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Extensions</span>
+    <h3 class="mb-0">Request Extension</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost form-card-tight">
+  <div class="card-body">
+    <p class="text-muted small">{{ issue.book.title }} · Due {{ issue.due_date|default:'-' }}</p>
+    <form method="post" data-loading class="form-compact">
+      {% csrf_token %}
+      <div class="form-floating-modern">
+        {{ form.days_requested }}
+        <label>Extra days</label>
+      </div>
+      <div class="form-floating-modern">
+        {{ form.reason }}
+        <label>Reason</label>
+      </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <a class="btn btn-outline-dark" href="{% url 'return_extensions:my-extensions' %}">Back</a>
+        <button class="btn btn-gradient" type="submit">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

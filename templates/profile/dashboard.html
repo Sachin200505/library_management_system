@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Profile</span>
+    <h3 class="mb-0">My Activity</h3>
+  </div>
+</div>
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card-modern card-ghost">
+      <div class="card-header">Recent Issues</div>
+      <div class="card-body table-responsive table-modern">
+        <table class="table table-modern-striped align-middle mb-0 table-stack">
+          <thead><tr><th>Book</th><th>Status</th><th>Due</th></tr></thead>
+          <tbody>
+            {% for i in issues %}
+            <tr><td data-label="Book">{{ i.book.title }}</td><td data-label="Status">{{ i.get_status_display }}</td><td data-label="Due">{{ i.due_date|default:'-' }}</td></tr>
+            {% empty %}<tr><td colspan="3" class="text-center text-muted">No issues.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card-modern card-ghost">
+      <div class="card-header">Reservations</div>
+      <div class="card-body table-responsive table-modern">
+        <table class="table table-modern-striped align-middle mb-0 table-stack">
+          <thead><tr><th>Book</th><th>Status</th><th>Position</th></tr></thead>
+          <tbody>
+            {% for r in reservations %}
+            <tr><td data-label="Book">{{ r.book.title }}</td><td data-label="Status">{{ r.get_status_display }}</td><td data-label="Position">{{ r.position }}</td></tr>
+            {% empty %}<tr><td colspan="3" class="text-center text-muted">No reservations.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card-modern card-ghost">
+      <div class="card-header">Fines</div>
+      <div class="card-body table-responsive table-modern">
+        <table class="table table-modern-striped align-middle mb-0 table-stack">
+          <thead><tr><th>Book</th><th>Amount</th><th>Paid</th></tr></thead>
+          <tbody>
+            {% for f in fines %}
+            <tr><td data-label="Book">{{ f.issue.book.title }}</td><td data-label="Amount">{{ f.amount }}</td><td data-label="Paid">{{ f.paid|yesno:'Yes,No' }}</td></tr>
+            {% empty %}<tr><td colspan="3" class="text-center text-muted">No fines.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card-modern card-ghost">
+      <div class="card-header">Reviews</div>
+      <div class="card-body table-responsive table-modern">
+        <table class="table table-modern-striped align-middle mb-0 table-stack">
+          <thead><tr><th>Book</th><th>Rating</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for r in reviews %}
+            <tr><td data-label="Book">{{ r.book.title }}</td><td data-label="Rating">{{ r.rating }}/5</td><td data-label="Status">{{ r.get_status_display }}</td></tr>
+            {% empty %}<tr><td colspan="3" class="text-center text-muted">No reviews.</td></tr>{% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

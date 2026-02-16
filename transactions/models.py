@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from books.models import Book
+from system_settings.utils import get_setting_value
 
 
 class BookIssue(models.Model):
@@ -43,7 +44,8 @@ class BookIssue(models.Model):
         end_date = self.return_date or date.today()
         days_over = (end_date - self.due_date).days
         if days_over > 0:
-            return Decimal(days_over) * Decimal(str(settings.FINE_PER_DAY))
+            fine_per_day = Decimal(str(get_setting_value('fine_per_day', default=settings.FINE_PER_DAY)))
+            return Decimal(days_over) * fine_per_day
         return Decimal('0')
 
 

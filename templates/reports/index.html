@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Reports</span>
+    <h3 class="mb-0">Exports</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="card-modern card-ghost">
+          <div class="card-header">Issued Books</div>
+          <div class="card-body d-flex gap-2">
+            <a class="btn btn-gradient" href="{% url 'reports:issued-csv' %}">CSV</a>
+            <a class="btn btn-outline-dark" href="{% url 'reports:issued-pdf' %}">PDF</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card-modern card-ghost">
+          <div class="card-header">Overdue Books</div>
+          <div class="card-body d-flex gap-2">
+            <a class="btn btn-gradient" href="{% url 'reports:overdue-csv' %}">CSV</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card-modern card-ghost">
+          <div class="card-header">Fines</div>
+          <div class="card-body d-flex gap-2">
+            <a class="btn btn-gradient" href="{% url 'reports:fines-csv' %}">CSV</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card-modern card-ghost">
+          <div class="card-header">Book Suggestions</div>
+          <div class="card-body d-flex gap-2">
+            <a class="btn btn-gradient" href="{% url 'reports:suggestions-csv' %}">CSV</a>
+            <a class="btn btn-outline-dark" href="{% url 'reports:suggestions-pdf' %}">PDF</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Review Suggestion{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Admin</span>
+    <h3 class="mb-0">Review Suggestion</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost form-card-tight">
+  <div class="card-body">
+    <div class="mb-3">
+      <h5 class="mb-1">{{ suggestion.title }}</h5>
+      <p class="mb-1 text-muted small">{{ suggestion.author }} · {{ suggestion.category }}</p>
+      <p class="mb-0">{{ suggestion.reason }}</p>
+    </div>
+    <form method="post" data-loading class="form-compact">
+      {% csrf_token %}
+      <div class="form-floating-modern">
+        {{ form.status }}
+        <label>Status</label>
+      </div>
+      <div class="form-floating-modern">
+        {{ form.admin_note }}
+        <label>Admin Note</label>
+      </div>
+      <div class="d-flex gap-2 justify-content-end">
+        <a class="btn btn-outline-dark" href="{% url 'book_suggestions:admin-list' %}">Back</a>
+        <button class="btn btn-gradient" type="submit">Update</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

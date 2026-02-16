@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Reservations{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Admin</span>
+    <h3 class="mb-0">Reservations</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Book</th><th>User</th><th>Status</th><th>Position</th><th>Expires</th><th></th></tr></thead>
+      <tbody>
+        {% for r in reservations %}
+        <tr>
+          <td data-label="Book">{{ r.book.title }}</td>
+          <td data-label="User">{{ r.user.username }}</td>
+          <td data-label="Status"><span class="badge-status badge-soft">{{ r.get_status_display }}</span></td>
+          <td data-label="Position">{{ r.position }}</td>
+          <td data-label="Expires">{{ r.expires_at|date:'Y-m-d H:i'|default:'-' }}</td>
+          <td class="text-end" data-label="Actions">
+            {% if r.status == 'QUEUED' %}
+            <a class="btn btn-gradient btn-sm" href="{% url 'reservations:approve' r.id %}">Approve</a>
+            {% endif %}
+            {% if r.status == 'QUEUED' or r.status == 'APPROVED' %}
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'reservations:cancel-admin' r.id %}">Cancel</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center text-muted">No reservations.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

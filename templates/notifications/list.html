@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Alerts</span>
+    <h3 class="mb-0">Notifications</h3>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-dark btn-sm" href="{% url 'notifications:mark-all' %}">Mark all read</a>
+  </div>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Message</th><th>Category</th><th>Received</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+        {% for n in notifications %}
+        <tr>
+          <td data-label="Message">{{ n.message }}</td>
+          <td data-label="Category">{{ n.get_category_display }}</td>
+          <td data-label="Received">{{ n.created_at|date:'Y-m-d H:i' }}</td>
+          <td data-label="Status">{% if n.is_read %}<span class="badge-soft">Read</span>{% else %}<span class="badge-status badge-available">Unread</span>{% endif %}</td>
+          <td class="text-end" data-label="Actions">
+            {% if not n.is_read %}
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'notifications:mark-read' n.id %}">Mark read</a>
+            {% else %}
+            <a class="btn btn-soft-orange btn-sm" href="{{ n.target_url|default:'#' }}">Open</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">No notifications.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -11,7 +11,7 @@
 <div class="card-modern card-ghost">
   <div class="card-body table-responsive table-modern">
     <table class="table table-modern-striped align-middle mb-0 table-stack">
-      <thead><tr><th>Book</th><th>Status</th><th>Due Date</th><th>Fine (calculated)</th></tr></thead>
+      <thead><tr><th>Book</th><th>Status</th><th>Due Date</th><th>Fine (calculated)</th><th></th></tr></thead>
       <tbody>
         {% for issue in issues %}
         <tr>
@@ -19,9 +19,14 @@
           <td data-label="Status">{{ issue.status }}</td>
           <td data-label="Due Date">{{ issue.due_date|default:'-' }}</td>
           <td data-label="Fine (calculated)">{% if issue.fine %}{{ issue.fine.amount }}{% elif issue.is_overdue %}{{ issue.compute_fine }}{% else %}-{% endif %}</td>
+          <td data-label="Actions" class="text-end">
+            {% if issue.fine and not issue.fine.paid %}
+            <a class="btn btn-soft-orange btn-sm" href="{% url 'fine_payments:pay' issue.fine.id %}">Pay</a>
+            {% endif %}
+          </td>
         </tr>
         {% empty %}
-        <tr><td colspan="4" class="text-center text-muted">No fines.</td></tr>
+        <tr><td colspan="5" class="text-center text-muted">No fines.</td></tr>
         {% endfor %}
       </tbody>
     </table>

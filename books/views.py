@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Avg, Q
 from django.shortcuts import get_object_or_404, redirect, render
 
 from accounts.decorators import role_required
@@ -15,7 +16,9 @@ def book_list(request):
     query = request.GET.get('q', '')
     category_id = request.GET.get('category')
 
-    books = Book.objects.select_related('author', 'category').all()
+    books = Book.objects.select_related('author', 'category').annotate(
+        avg_rating=Avg('reviews__rating', filter=Q(reviews__status='APPROVED'))
+    )
     if query:
         books = books.filter(title__icontains=query) | books.filter(author__name__icontains=query)
     if category_id:

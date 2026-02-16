@@ -8,6 +8,16 @@ urlpatterns = [
     path('', include('accounts.urls', namespace='accounts')),
     path('books/', include('books.urls', namespace='books')),
     path('transactions/', include('transactions.urls', namespace='transactions')),
+    path('suggestions/', include('book_suggestions.urls', namespace='book_suggestions')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
+    path('reservations/', include('reservations.urls', namespace='reservations')),
+    path('reviews/', include('reviews.urls', namespace='reviews')),
+    path('analytics/', include('analytics.urls', namespace='analytics')),
+    path('reports/', include('reports.urls', namespace='reports')),
+    path('profile/', include('profile.urls', namespace='profile')),
+    path('settings/', include('system_settings.urls', namespace='system_settings')),
+    path('return-extensions/', include('return_extensions.urls', namespace='return_extensions')),
+    path('fine-payments/', include('fine_payments.urls', namespace='fine_payments')),
 ]
 
 if settings.DEBUG:

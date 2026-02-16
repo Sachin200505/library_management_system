@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Review {{ book.title }}{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Reviews</span>
+    <h3 class="mb-0">Review {{ book.title }}</h3>
+  </div>
+</div>
+<div class="card-modern card-ghost form-card-tight">
+  <div class="card-body">
+    <form method="post" data-loading class="form-compact">
+      {% csrf_token %}
+      <div class="form-floating-modern">
+        {{ form.rating }}
+        <label>Rating (1-5)</label>
+      </div>
+      <div class="form-floating-modern">
+        {{ form.text }}
+        <label>Review</label>
+      </div>
+      <button class="btn btn-gradient w-100" type="submit">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -9,6 +9,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from accounts.decorators import role_required
 from accounts.models import UserProfile
 from books.models import Book
+from notifications.utils import notify_user
+from system_settings.utils import get_setting_value
 
 from .forms import IssueRequestForm
 from .models import BookIssue, Fine
@@ -67,13 +69,15 @@ def approve_issue(request, pk):
 
     issue.status = BookIssue.STATUS_ISSUED
     issue.issue_date = date.today()
-    issue.due_date = date.today() + timedelta(days=settings.ISSUE_DURATION_DAYS)
+    issue_days = int(get_setting_value('max_issue_days', default=settings.ISSUE_DURATION_DAYS))
+    issue.due_date = date.today() + timedelta(days=issue_days)
     issue.save()
 
     book.available_count = max(book.available_count - 1, 0)
     book.save()
 
     messages.success(request, 'Issue approved.')
+    notify_user(issue.user, f"Your request for '{book.title}' was approved.", category='issue')
     return redirect('transactions:issue-requests')
 
 
@@ -85,6 +89,7 @@ def reject_issue(request, pk):
     issue.status = BookIssue.STATUS_REJECTED
     issue.save()
     messages.info(request, 'Issue rejected.')
+    notify_user(issue.user, f"Your request for '{issue.book.title}' was rejected.", category='issue')
     return redirect('transactions:issue-requests')
 
 
@@ -105,6 +110,7 @@ def mark_returned(request, pk):
     if fine_amount > 0:
         Fine.objects.update_or_create(issue=issue, defaults={'amount': fine_amount, 'paid': False})
     messages.success(request, 'Book marked as returned.')
+    notify_user(issue.user, f"'{book.title}' was marked as returned.", category='issue')
     return redirect('transactions:issue-requests')
 
 

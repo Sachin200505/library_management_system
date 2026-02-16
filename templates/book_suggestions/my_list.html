@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}My Suggestions{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div class="title-block">
+    <span class="kicker">Suggestions</span>
+    <h3 class="mb-0">My Suggestions</h3>
+  </div>
+  <a class="btn btn-gradient btn-sm" href="{% url 'book_suggestions:submit' %}">New Suggestion</a>
+</div>
+<div class="card-modern card-ghost">
+  <div class="card-body table-responsive table-modern">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
+      <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Status</th><th>Updated</th></tr></thead>
+      <tbody>
+        {% for s in suggestions %}
+        <tr>
+          <td data-label="Title">{{ s.title }}</td>
+          <td data-label="Author">{{ s.author }}</td>
+          <td data-label="Category">{{ s.category }}</td>
+          <td data-label="Status"><span class="badge-status badge-soft">{{ s.get_status_display }}</span></td>
+          <td data-label="Updated">{{ s.updated_at|date:'Y-m-d H:i' }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" class="text-center text-muted">No suggestions yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -23,15 +23,22 @@
     <div class="card-modern card-ghost h-100 animate-fade-in">
       <div class="card-body d-flex flex-column">
         <div class="d-flex justify-content-between align-items-start mb-2">
-          <h5 class="card-title mb-0">{{ book.title }}</h5>
+          <div>
+            <h5 class="card-title mb-0">{{ book.title }}</h5>
+            {% if book.avg_rating %}<span class="badge-soft"><i class="bi bi-star-fill text-warning"></i> {{ book.avg_rating|floatformat:1 }}/5</span>{% endif %}
+          </div>
           {% if book.is_available %}<span class="badge-status badge-available">Available</span>{% else %}<span class="badge-status badge-overdue">Out</span>{% endif %}
         </div>
         <p class="text-muted small mb-1">{{ book.author.name }} · {{ book.category }}</p>
         <p class="small flex-grow-1">{{ book.description|truncatechars:120 }}</p>
         <div class="d-flex justify-content-between align-items-center mt-2">
           <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#bookModal" data-title="{{ book.title }}" data-author="{{ book.author.name }}" data-category="{{ book.category }}" data-desc="{{ book.description }}" data-available="{{ book.available_count }}">Details</button>
-          {% if user.is_authenticated and user.profile.role == 'STUDENT' and book.is_available %}
-          <a class="btn btn-soft-orange btn-sm" href="{% url 'transactions:request-issue-book' book.id %}">Request</a>
+          {% if user.is_authenticated and user.profile.role == 'STUDENT' %}
+            {% if book.is_available %}
+            <a class="btn btn-soft-orange btn-sm" href="{% url 'transactions:request-issue-book' book.id %}">Request</a>
+            {% else %}
+            <a class="btn btn-outline-dark btn-sm" href="{% url 'reservations:create' book.id %}">Reserve</a>
+            {% endif %}
           {% endif %}
         </div>
       </div>
