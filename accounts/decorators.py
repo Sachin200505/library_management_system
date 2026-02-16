@@ -1,6 +1,9 @@
 from functools import wraps
+
 from django.contrib import messages
 from django.shortcuts import redirect
+
+from .models import UserProfile
 
 
 def role_required(required_role):
@@ -17,3 +20,13 @@ def role_required(required_role):
         return _wrapped_view
 
     return decorator
+
+
+def admin_required(view_func):
+    """Shortcut decorator for admin-only views."""
+    return role_required(UserProfile.ROLE_ADMIN)(view_func)
+
+
+def student_required(view_func):
+    """Shortcut decorator for student-only views."""
+    return role_required(UserProfile.ROLE_STUDENT)(view_func)

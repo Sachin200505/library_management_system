@@ -54,6 +54,92 @@
     if (e.key === 'Escape') closeSidebar();
   });
 
+  // Stack tables on small screens by copying headers into data-labels
+  const enhanceTables = () => {
+    document.querySelectorAll('.table-modern table').forEach((table) => {
+      const headers = Array.from(table.querySelectorAll('thead th')).map((th) => th.textContent.trim());
+      table.classList.add('table-stack');
+      table.querySelectorAll('tbody tr').forEach((row) => {
+        row.querySelectorAll('td').forEach((td, idx) => {
+          if (!td.dataset.label) {
+            td.dataset.label = headers[idx] || '';
+          }
+        });
+      });
+    });
+  };
+
+  // Simple paginator that works with duplicated desktop/mobile rows via shared data-book-id
+  const paginateContainers = () => {
+    document.querySelectorAll('[data-paginate]').forEach((container) => {
+      const pageSize = parseInt(container.dataset.pageSize || '10', 10);
+      const rowSelector = container.dataset.rowSelector || '.js-item';
+      const paginationSelector = container.dataset.pagination;
+      const paginationEl = paginationSelector ? document.querySelector(paginationSelector) : container.querySelector('[data-pagination]');
+      if (!paginationEl) return;
+
+      const rows = Array.from(container.querySelectorAll(rowSelector));
+      const groups = new Map();
+      rows.forEach((row, idx) => {
+        const key = row.dataset.bookId || row.dataset.itemId || row.dataset.id || row.dataset.key || `row-${idx}`;
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(row);
+      });
+
+      const visibleKeys = Array.from(groups.entries()).filter(([, list]) => list.some((el) => el.style.display !== 'none' && !el.dataset.searchHidden));
+      const pageCount = Math.max(1, Math.ceil(visibleKeys.length / pageSize));
+      const current = Math.min(Math.max(parseInt(container.dataset.page || '1', 10), 1), pageCount);
+      container.dataset.page = current;
+
+      const start = (current - 1) * pageSize;
+      const end = start + pageSize;
+      const keysToShow = new Set(visibleKeys.slice(start, end).map(([key]) => key));
+
+      groups.forEach((list, key) => {
+        const shouldShow = keysToShow.has(key);
+        list.forEach((el) => {
+          if (shouldShow && !el.dataset.searchHidden) {
+            el.style.display = '';
+            el.dataset.paginatedHidden = '';
+          } else {
+            el.style.display = 'none';
+            el.dataset.paginatedHidden = '1';
+          }
+        });
+      });
+
+      paginationEl.innerHTML = '';
+      if (pageCount <= 1) return;
+
+      const addPage = (page, label, disabled = false, active = false) => {
+        const li = document.createElement('li');
+        li.className = `page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}`;
+        const a = document.createElement('a');
+        a.className = 'page-link';
+        a.href = '#';
+        a.textContent = label;
+        a.dataset.page = page;
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (disabled) return;
+          container.dataset.page = page;
+          paginateContainers();
+        });
+        li.appendChild(a);
+        paginationEl.appendChild(li);
+      };
+
+      addPage(current - 1, 'Prev', current === 1);
+      for (let i = 1; i <= pageCount; i += 1) {
+        addPage(i, i, false, i === current);
+      }
+      addPage(current + 1, 'Next', current === pageCount);
+    });
+  };
+
+  enhanceTables();
+  paginateContainers();
+
   // Live filter helper
   document.querySelectorAll('[data-search-input]')?.forEach(input => {
     const targetSelector = input.dataset.searchTarget;
@@ -63,10 +149,19 @@
       const term = input.value.toLowerCase();
       rows.forEach(row => {
         const value = (row.dataset.searchValue || '').toLowerCase();
-        row.style.display = value.includes(term) ? '' : 'none';
+        const match = value.includes(term);
+        row.style.display = match ? '' : 'none';
+        if (match) {
+          delete row.dataset.searchHidden;
+        } else {
+          row.dataset.searchHidden = '1';
+        }
       });
+      document.dispatchEvent(new CustomEvent('list:filtered'));
     });
   });
+
+  document.addEventListener('list:filtered', paginateContainers);
 
   // Fine preview: data-fine-preview="{daysLate}" -> update target span
   document.querySelectorAll('[data-fine-preview]')?.forEach(input => {

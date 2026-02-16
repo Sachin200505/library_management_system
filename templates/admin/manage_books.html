@@ -14,25 +14,57 @@
 </div>
 
 <div class="card-modern card-ghost">
-  <div class="card-header d-flex justify-content-between align-items-center">
+  <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
     <span>Catalog</span>
-    <input class="form-control w-auto" placeholder="Live filter" data-search-input data-search-target=".book-row" />
+    <input class="form-control w-auto flex-grow-1 flex-md-grow-0" placeholder="Live filter" data-search-input data-search-target=".book-row" />
   </div>
-  <div class="card-body table-responsive table-modern">
-    <table class="table table-modern-striped align-middle mb-0">
-      <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Qty</th><th>Available</th><th class="text-end">Actions</th></tr></thead>
-      <tbody>
-        {% for book in books %}
-        <tr class="book-row" data-search-value="{{ book.title }} {{ book.author.name }} {{ book.category }}">
-          <td>{{ book.title }}</td><td>{{ book.author.name }}</td><td>{{ book.category }}</td><td>{{ book.quantity }}</td><td>{{ book.available_count }}</td>
-          <td class="text-end">
-            <a class="btn btn-sm btn-outline-dark" href="{% url 'books:update-book' book.id %}">Edit</a>
-            <a class="btn btn-sm btn-danger" href="{% url 'books:delete-book' book.id %}" data-confirm="Delete this book?">Delete</a>
-          </td>
-        </tr>
-        {% empty %}<tr><td colspan="6" class="text-center text-muted">No books yet.</td></tr>{% endfor %}
-      </tbody>
-    </table>
+  <div class="card-body table-modern" data-paginate data-row-selector=".book-row" data-pagination="#books-pagination" data-page-size="10">
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-modern-striped align-middle mb-0">
+        <thead><tr><th>Title</th><th>Author</th><th>Category</th><th>Qty</th><th>Available</th><th class="text-end">Actions</th></tr></thead>
+        <tbody>
+          {% for book in books %}
+          <tr class="book-row" data-book-id="{{ book.id }}" data-search-value="{{ book.title }} {{ book.author.name }} {{ book.category }}">
+            <td>{{ book.title }}</td><td>{{ book.author.name }}</td><td>{{ book.category }}</td><td>{{ book.quantity }}</td><td>{{ book.available_count }}</td>
+            <td class="text-end">
+              <a class="btn btn-sm btn-outline-dark" href="{% url 'books:update-book' book.id %}">Edit</a>
+              <a class="btn btn-sm btn-danger" href="{% url 'books:delete-book' book.id %}" data-confirm="Delete this book?">Delete</a>
+            </td>
+          </tr>
+          {% empty %}<tr><td colspan="6" class="text-center text-muted">No books yet.</td></tr>{% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="d-md-none">
+      {% for book in books %}
+      <div class="card card-body mb-2 book-row book-card" data-book-id="{{ book.id }}" data-search-value="{{ book.title }} {{ book.author.name }} {{ book.category }}">
+        <div class="book-card__top">
+          <div class="book-card__title">{{ book.title }}</div>
+          <span class="badge-status badge-available">{{ book.available_count }} / {{ book.quantity }}</span>
+        </div>
+        <div class="book-card__meta">{{ book.author.name }} · {{ book.category }}</div>
+        <div class="book-card__stats">
+          <div>
+            <div class="label">Available</div>
+            <div class="value">{{ book.available_count }}</div>
+          </div>
+          <div>
+            <div class="label">Total</div>
+            <div class="value">{{ book.quantity }}</div>
+          </div>
+        </div>
+        <div class="book-card__actions">
+          <a class="btn btn-outline-dark btn-sm" href="{% url 'books:update-book' book.id %}">Edit</a>
+          <a class="btn btn-danger btn-sm" href="{% url 'books:delete-book' book.id %}" data-confirm="Delete this book?">Delete</a>
+        </div>
+      </div>
+      {% empty %}
+      <p class="text-muted small mb-0">No books yet.</p>
+      {% endfor %}
+    </div>
+    <nav class="mt-3" aria-label="Books pagination">
+      <ul class="pagination pagination-sm mb-0" id="books-pagination"></ul>
+    </nav>
   </div>
 </div>
 {% endblock %}

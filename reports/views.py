@@ -36,28 +36,72 @@ def _csv_response(filename, rows, headers):
 
 
 def _pdf_response(filename, title, rows, headers):
-    if not canvas:
-        return _csv_response(filename.replace('.pdf', '.csv'), rows, headers)
-    buffer = BytesIO()
-    p = canvas.Canvas(buffer, pagesize=A4)
-    width, height = A4
-    y = height - 50
-    p.setFont('Helvetica-Bold', 14)
-    p.drawString(50, y, title)
-    y -= 30
-    p.setFont('Helvetica', 10)
-    header_line = ' | '.join(headers)
-    p.drawString(50, y, header_line)
-    y -= 20
-    for row in rows:
-        p.drawString(50, y, ' | '.join([str(x) for x in row]))
-        y -= 16
-        if y < 50:
-            p.showPage()
-            y = height - 50
-    p.save()
-    pdf = buffer.getvalue()
-    buffer.close()
+    def _fallback_pdf_bytes(title_text, header_list, row_list):
+        # Minimal, dependency-free PDF to avoid CSV fallback when reportlab is missing.
+        def esc(text):
+            return str(text).replace('\\', r'\\').replace('(', r'\(').replace(')', r'\)')
+
+        lines = [title_text, ' | '.join(header_list)] + [' | '.join([esc(x) for x in row]) for row in row_list]
+        text_ops = ["BT", "/F1 12 Tf", "50 780 Td", "14 TL"]
+        for idx, line in enumerate(lines):
+            if idx > 0:
+                text_ops.append("T*")
+            text_ops.append(f"({line}) Tj")
+        text_ops.append("ET")
+        stream = "\n".join(text_ops)
+
+        pdf_parts = ["%PDF-1.4\n"]
+        xref_offsets = []
+
+        def add_obj(obj_num: int, content: str):
+            offset = sum(len(p.encode('utf-8')) for p in pdf_parts)
+            xref_offsets.append(offset)
+            pdf_parts.append(f"{obj_num} 0 obj\n{content}\nendobj\n")
+
+        add_obj(1, "<< /Type /Catalog /Pages 2 0 R >>")
+        add_obj(2, "<< /Type /Pages /Kids [3 0 R] /Count 1 >>")
+        add_obj(3, "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>")
+        add_obj(4, f"<< /Length {len(stream.encode('utf-8'))} >>\nstream\n{stream}\nendstream")
+        add_obj(5, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>")
+
+        xref_start = sum(len(p.encode('utf-8')) for p in pdf_parts)
+        xref_lines = ["xref", f"0 {len(xref_offsets) + 1}", "0000000000 65535 f "]
+        for off in xref_offsets:
+            xref_lines.append(f"{off:010d} 00000 n ")
+        trailer = [
+            "trailer",
+            f"<< /Size {len(xref_offsets) + 1} /Root 1 0 R >>",
+            "startxref",
+            str(xref_start),
+            "%%EOF",
+        ]
+        pdf_parts.append("\n".join(xref_lines + trailer) + "\n")
+        return "".join(pdf_parts).encode('utf-8')
+
+    if canvas:
+        buffer = BytesIO()
+        p = canvas.Canvas(buffer, pagesize=A4)
+        width, height = A4
+        y = height - 50
+        p.setFont('Helvetica-Bold', 14)
+        p.drawString(50, y, title)
+        y -= 30
+        p.setFont('Helvetica', 10)
+        header_line = ' | '.join(headers)
+        p.drawString(50, y, header_line)
+        y -= 20
+        for row in rows:
+            p.drawString(50, y, ' | '.join([str(x) for x in row]))
+            y -= 16
+            if y < 50:
+                p.showPage()
+                y = height - 50
+        p.save()
+        pdf = buffer.getvalue()
+        buffer.close()
+    else:
+        pdf = _fallback_pdf_bytes(title, headers, rows)
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{filename}"'
     response.write(pdf)
