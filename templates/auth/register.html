@@ -12,7 +12,7 @@
   <div class="card-modern card-ghost">
     <div class="card-body p-4">
       <p class="text-muted small">Choose Student or Admin (set Admin only if authorized).</p>
-      <form method="post" data-loading>
+      <form method="post" data-loading class="signup-form">
         {% csrf_token %}
         {{ form.non_field_errors }}
         <div class="row g-3">

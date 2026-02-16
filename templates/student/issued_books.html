@@ -10,17 +10,17 @@
 </div>
 <div class="card-modern card-ghost">
   <div class="card-body table-responsive table-modern">
-    <table class="table table-modern-striped align-middle mb-0">
+    <table class="table table-modern-striped align-middle mb-0 table-stack">
       <thead><tr><th>Book</th><th>Status</th><th>Issue</th><th>Due</th><th>Return</th><th>Fine</th></tr></thead>
       <tbody>
         {% for issue in issues %}
         <tr class="{% if issue.is_overdue %}table-warning{% endif %}">
-          <td>{{ issue.book.title }}</td>
-          <td>{% if issue.is_overdue %}<span class="badge badge-status badge-overdue">Overdue</span>{% else %}<span class="badge badge-status badge-issued">{{ issue.status }}</span>{% endif %}</td>
-          <td>{{ issue.issue_date|default:'-' }}</td>
-          <td>{{ issue.due_date|default:'-' }}</td>
-          <td>{{ issue.return_date|default:'-' }}</td>
-          <td>
+          <td data-label="Book">{{ issue.book.title }}</td>
+          <td data-label="Status">{% if issue.is_overdue %}<span class="badge badge-status badge-overdue">Overdue</span>{% else %}<span class="badge badge-status badge-issued">{{ issue.status }}</span>{% endif %}</td>
+          <td data-label="Issue">{{ issue.issue_date|default:'-' }}</td>
+          <td data-label="Due">{{ issue.due_date|default:'-' }}</td>
+          <td data-label="Return">{{ issue.return_date|default:'-' }}</td>
+          <td data-label="Fine">
             {% if issue.fine %}{{ issue.fine.amount }}{% elif issue.is_overdue %}{{ issue.compute_fine }}{% else %}-{% endif %}
           </td>
         </tr>

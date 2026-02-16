@@ -1,31 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary-orange: #ff7a18;
-  --secondary-orange: #ffb347;
+  --primary-orange: #f97316;
+  --secondary-orange: #fb923c;
   --accent-orange: #ff9800;
-  --dark-bg: #0f172a;
-  --soft-bg: #fff7ed;
+  --page-bg: #f6f7fb;
   --card-bg: #ffffff;
   --text-dark: #0f172a;
   --text-muted: #475569;
   --text-light: #f8fafc;
-  --border-subtle: #e2e8f0;
-  --glass: rgba(255, 255, 255, 0.08);
-  --radius-lg: 20px;
-  --radius-md: 14px;
-  --shadow-soft: 0 10px 40px rgba(15, 23, 42, 0.12);
-  --shadow-card: 0 12px 30px rgba(0, 0, 0, 0.12);
-  --gradient: linear-gradient(135deg, #ff7a18, #ffb347);
-  --gradient-soft: linear-gradient(135deg, rgba(255, 122, 24, 0.12), rgba(255, 179, 71, 0.12));
-  --gradient-dark: linear-gradient(135deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.82));
+  --border-subtle: #e5e7eb;
+  --border-strong: #d1d5db;
+  --glass: rgba(255, 255, 255, 0.86);
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --shadow-soft: 0 8px 30px rgba(15, 23, 42, 0.08);
+  --shadow-card: 0 10px 24px rgba(15, 23, 42, 0.1);
+  --gradient: linear-gradient(135deg, #f97316, #fb923c);
+  --gradient-soft: linear-gradient(135deg, rgba(249, 115, 22, 0.12), rgba(251, 146, 60, 0.1));
+  --gradient-dark: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.82));
 }
 
 * { box-sizing: border-box; }
 
 body {
   font-family: 'Poppins', 'Space Grotesk', system-ui, -apple-system, sans-serif;
-  background: radial-gradient(circle at 10% 20%, rgba(255, 122, 24, 0.08), rgba(15, 23, 42, 0.05) 32%, #f7f8fb 70%);
+  background: radial-gradient(circle at 20% 20%, rgba(15, 23, 42, 0.02), rgba(249, 115, 22, 0.05) 30%, transparent 60%), var(--page-bg);
   color: var(--text-dark);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -45,7 +45,7 @@ img { max-width: 100%; height: auto; }
 
 .shadow-soft { box-shadow: var(--shadow-soft); }
 
-.glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.35); }
+.glass-panel { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid rgba(229, 231, 235, 0.8); }
 
 .gradient-surface { background: var(--gradient-soft); border-radius: var(--radius-lg); }
 
