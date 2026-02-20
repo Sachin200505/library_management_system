@@ -22,6 +22,9 @@ ALLOWED_HOSTS = list(dict.fromkeys(_env_hosts + _default_hosts))
 
 # Security for Production (Proxy Detection)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_SSL_REDIRECT = not DEBUG
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -140,6 +143,7 @@ SESSION_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
 SESSION_COOKIE_SECURE = not DEBUG
 CSRF_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
 CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = False  # Allows frontend to read the cookie
 
 FINE_PER_DAY = float(os.environ.get('LIBRARY_FINE_PER_DAY', 5))
 ISSUE_DURATION_DAYS = int(os.environ.get('LIBRARY_ISSUE_DURATION_DAYS', 14))
