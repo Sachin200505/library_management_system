@@ -1,1 +1,0 @@
-import{d as s}from"./index-B0U1T1C1.js";const r={getAll:async()=>(await s.get("reservations/")).data,create:async e=>(await s.post("reservations/",{book:e})).data,cancel:async e=>{await s.delete(`reservations/${e}/`)}};export{r as R};

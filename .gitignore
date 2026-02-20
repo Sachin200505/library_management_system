@@ -16,6 +16,11 @@ venv/
 staticfiles/
 media/
 
+# Node
+node_modules/
+dist/
+build/
+
 # IDE/OS
 .vscode/
 .idea/
