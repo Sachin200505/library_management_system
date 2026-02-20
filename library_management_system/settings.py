@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'replace-me-in-env')
 DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+
 _default_hosts = [
     'localhost',
     '127.0.0.1',
@@ -18,6 +19,9 @@ _default_hosts = [
 ]
 _env_hosts = [host.strip() for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if host.strip()]
 ALLOWED_HOSTS = list(dict.fromkeys(_env_hosts + _default_hosts))
+
+# Security for Production (Proxy Detection)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
