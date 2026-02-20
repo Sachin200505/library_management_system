@@ -1,0 +1,72 @@
+
+--- Login Attempt: Aakash2004 ---
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: Sachin200505 ---
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: Aakash2004 ---
+Authentication successful.
+
+--- Login Attempt: jishnugowtham2132004@gmail.com ---
+Resolved email to username: jishnudoggy
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication failed (authenticate returned None).
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: jishnudoggy ---
+Authentication failed (authenticate returned None).
+
+--- Login Attempt: jishnudoggy ---
+Authentication successful.
+
+--- Login Attempt: Aakash2004 ---
+Authentication successful.
+
+--- Login Attempt: jishnudoggy ---
+Authentication successful.
+
+--- Login Attempt: owner@gmail.com ---
+Resolved email to username: owner
+Authentication successful.
+
+--- Login Attempt: jishnudoggy ---
+Authentication successful.
+
+--- Login Attempt: Aakash2004 ---
+Authentication successful.
+
+--- Login Attempt: SachinSundar2005 ---
+Authentication successful.
+
+--- Login Attempt: SachinSundar2005 ---
+Authentication failed (authenticate returned None).
+
+--- Login Attempt: SachinSundar2005 ---
+Authentication successful.

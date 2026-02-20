@@ -1,0 +1,1 @@
+import{d as s}from"./index-B0U1T1C1.js";const o={getAll:async()=>(await s.get("reviews/")).data,getForBook:async e=>(await s.get(`reviews/?book=${e}`)).data,create:async e=>(await s.post("reviews/",e)).data,updateStatus:async(e,t)=>(await s.patch(`reviews/${e}/`,{status:t})).data};export{o as R};

@@ -1,0 +1,1 @@
+import{d as e}from"./index-B0U1T1C1.js";const r={getAll:async()=>(await e.get("issues/")).data,requestBook:async s=>(await e.post("issues/",{book_id:s})).data,approveIssue:async s=>(await e.post(`issues/${s}/approve/`)).data,rejectIssue:async s=>(await e.post(`issues/${s}/reject/`)).data,returnBook:async s=>(await e.post(`issues/${s}/return_book/`)).data};export{r as I};

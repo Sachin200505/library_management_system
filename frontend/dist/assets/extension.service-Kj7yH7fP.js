@@ -1,0 +1,1 @@
+import{d as s}from"./index-B0U1T1C1.js";const r={getAll:async()=>(await s.get("return_extensions/")).data,request:async e=>(await s.post("return_extensions/",e)).data,approve:async e=>(await s.post(`return_extensions/${e}/approve/`)).data,reject:async e=>(await s.post(`return_extensions/${e}/reject/`)).data};export{r as E};

@@ -1,50 +1,111 @@
-# Library Management System (Django + Supabase Postgres)
+# 📚 LIBSYS — The Ultimate Library Ecosystem
+[![React](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![Django](https://img.shields.io/badge/Backend-Django%20REST-092E20?style=for-the-badge&logo=django)](https://www.djangoproject.com/)
+[![Tailwind](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-A mini/full-length academic project featuring authentication, role-based access (Admin/Student), book catalog, issue/return workflow with fines, and dashboard metrics. Uses Django templates with a light-orange Bootstrap theme.
+**LIBSYS** is a state-of-the-art Library Management System designed for the modern academic environment. It combines a high-performance Django backend with a stunning, immersive React frontend to deliver a seamless experience for Students, Admins, and Owners.
 
-## Features
-- Student registration/login, Admin login (Django auth with hashed passwords, sessions)
-- Role-based dashboards (Admin: stats + requests; Student: latest books + my issues)
-- CRUD: Books, Authors, Categories
-- Book search/filter, availability tracking
-- Issue/return flow with statuses (Requested, Issued, Returned, Rejected)
-- Overdue detection and automatic fine calculation (per-day rate configurable)
-- Supabase/PostgreSQL ready via environment variables
+---
 
-## Project Structure
-Matches the required layout: apps `accounts`, `books`, `transactions`; templates/static; `.env.example`, `requirements.txt`, `manage.py`.
+## ✨ Immersive Features
 
-## Setup (Local)
-1) **Python env**: Python 3.10+ recommended. Create venv: `python -m venv .venv && .venv\Scripts\activate` (Windows).
-2) **Install deps**: `pip install -r requirements.txt`.
-3) **Env vars**: Copy `.env.example` to `.env` and fill Supabase Postgres credentials plus a strong `DJANGO_SECRET_KEY`.
-4) **Migrate**: `python manage.py migrate`.
-5) **Superuser**: `python manage.py createsuperuser` (for Admin role, set profile role to ADMIN via admin site or shell).
-6) **Run**: `python manage.py runserver` then visit `http://127.0.0.1:8000/`.
+### 🎨 Thematic Core
+- **20+ Luxury Themes**: From "Timeless Learning" to "Nebula Research," the environment reacts to your focus with dynamic gradients and micro-animations.
+- **Glassmorphism UI**: High-end glass-based components for a premium feel.
+- **Responsive Mastery**: Precision-crafted layouts for Desktop, Tablet, and Mobile.
 
-## Deploy on Vercel (Docker)
-1) Ensure `DJANGO_DEBUG=False` and add your Vercel hostname to `DJANGO_ALLOWED_HOSTS` in `.env` or project env vars.
-2) Vercel picks up `vercel.json` + `Dockerfile`; it builds the image and runs `gunicorn`.
-3) Set env vars in Vercel: `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, `SUPABASE_DB_*`, `SUPABASE_SSL_MODE=require`, `DJANGO_SESSION_AGE`, etc.
-4) After first deploy, run `python manage.py migrate` (via Vercel CLI/shell). Optionally seed data: `python manage.py shell < scripts/seed_books.py`.
-5) Static files are served by WhiteNoise; collectstatic runs during the Docker build.
+### 📊 Tactical Dashboards
+- **Interactive Analytics**: Real-time charts (Recharts) tracking books, users, and transactions.
+- **Global Audit Logs**: Immutable history of every action taken within the system for complete transparency.
+- **Notification Engine**: Integrated alert system keeping all users updated on status shifts.
 
-## Database Notes (Supabase Postgres)
-- The app uses Django ORM; configure connection via `SUPABASE_DB_*` variables.
-- Tables: Users (Django auth), UserProfile, Author, Category, Book, BookIssue, Fine. Foreign keys enforce relationships and normalization.
+### 📖 Lifecycle Management
+- **Universal Search**: Lightning-fast keyword-based book discovery.
+- **Reservation Logic**: Real-time booking and availability tracking.
+- **Fine Automation**: Per-day fine calculation engine with integrated payment tracking.
+- **Review System**: Collaborative knowledge sharing through student reviews.
 
-## Sample Data
-- After migrating, use Django admin to add Authors, Categories, and Books. You can also create students via Register page. Admin can approve/reject requests.
+---
 
-## Flow Diagram (text)
-User -> Login/Register -> Dashboard (role-based) -> Books list -> Student requests issue -> Admin approves (issue_date + due_date set) -> Student sees issued; overdue triggers fine on return.
+## 🔐 Role-Based Authority
 
-## Testing Checklist
-- Register a student and log in.
-- Create admin (via superuser) and set profile role to ADMIN.
-- Add Authors, Categories, Books; verify availability counts.
-- Student: request a book; Admin: approve; verify due date and availability decrement.
-- Mark return; confirm availability increments and fine created if overdue.
+| Feature | Student | Admin | Owner |
+| :--- | :---: | :---: | :---: |
+| Browse & Review Books | ✅ | ✅ | ✅ |
+| Borrow / Reserve Books | ✅ | ❌ | ❌ |
+| Manage Inventory | ❌ | ✅ | ✅ |
+| Approve/Reject Requests | ❌ | ✅ | ✅ |
+| View System Analytics | ❌ | ⚠️ (Restricted) | ✅ (Full) |
+| Manage Staff/Admins | ❌ | ❌ | ✅ |
+| System-Wide Audit Logs | ❌ | ⚠️ (Limited) | ✅ (Global) |
 
-## Screenshots
-Add your own screenshots in `static/images` and reference them here for submissions.
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: React 18 + Vite (for speed)
+- **Icons**: Lucide React
+- **Charts**: Recharts
+- **Styling**: Tailwind CSS (Mobile-first surgical hotfixes applied)
+- **API Client**: Axios with interceptors
+
+### Backend
+- **Engine**: Django REST Framework (DRF)
+- **Database**: PostgreSQL (Supabase) / SQLite
+- **Auth**: JWT / Session-based role locking
+- **Performance**: WhiteNoise Static Serving
+
+---
+
+## 🚀 Quick Setup
+
+### 1. Prerequisites
+- Python 3.10+
+- Node.js 18+
+- npm / yarn
+
+### 2. Backend Installation
+```bash
+# Clone the repo
+cd "Library Management System"
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run migrations
+python manage.py migrate
+
+# Start server
+python manage.py runserver
+```
+
+### 3. Frontend Installation
+```bash
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+---
+
+## 🌍 Deployment
+- **Frontend**: Scaled on **Vercel** with full CI/CD.
+- **Backend**: Hosted on **Render** (or Dockerized environment).
+- **Database**: **Supabase** Managed PostgreSQL.
+
+---
+
+> [!IMPORTANT]
+> This system is designed for high-concurrency academic environments. Ensure CORS and CSRF origins are correctly set in the production `.env`.
+
+> [!TIP]
+> Use the **Owner** role to access the "System Pulse" dashboard for full-spectrum analytics and audit logs.
+
+---
+Created with ❤️ by **Sachin & Team** | 🛡️ *Redefining Scholarship*
