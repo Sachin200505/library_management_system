@@ -11,10 +11,14 @@ from .forms import LoginForm, RegisterForm
 from .models import UserProfile
 
 
+from django.http import JsonResponse
+
 def landing_view(request):
-    if request.user.is_authenticated:
-        return redirect('accounts:dashboard')
-    return render(request, 'landing.html')
+    return JsonResponse({
+        "status": "online",
+        "message": "LIBSYS API is running successfully. Please visit the React frontend to interact with the system.",
+        "api_docs": "/api/"
+    })
 
 
 def register_view(request):
