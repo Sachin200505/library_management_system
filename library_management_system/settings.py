@@ -139,11 +139,23 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 
 SESSION_COOKIE_AGE = int(os.environ.get('DJANGO_SESSION_AGE', 60 * 60 * 24))
 SESSION_SAVE_EVERY_REQUEST = True
-SESSION_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SAMESITE = 'None' if not DEBUG else 'Lax'
-CSRF_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_HTTPONLY = False  # Allows frontend to read the cookie
+
+# Production Cookie & Security Settings (Forces SameSite=None for Vercel <-> Render)
+IS_PRODUCTION = os.environ.get('RENDER') == 'true' or not DEBUG
+
+SESSION_COOKIE_SAMESITE = 'None' if IS_PRODUCTION else 'Lax'
+SESSION_COOKIE_SECURE = IS_PRODUCTION
+CSRF_COOKIE_SAMESITE = 'None' if IS_PRODUCTION else 'Lax'
+CSRF_COOKIE_SECURE = IS_PRODUCTION
+CSRF_COOKIE_HTTPONLY = False  # Critical for frontend access
+
+if IS_PRODUCTION:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
+    USE_X_FORWARDED_PORT = True
+    SECURE_SSL_REDIRECT = True
+    # Ensure media/static URLs are absolute in production if needed
+    # but usually relative is fine once X_FORWARDED is correct.
 
 FINE_PER_DAY = float(os.environ.get('LIBRARY_FINE_PER_DAY', 5))
 ISSUE_DURATION_DAYS = int(os.environ.get('LIBRARY_ISSUE_DURATION_DAYS', 14))
