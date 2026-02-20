@@ -108,4 +108,4 @@ npm run dev
 > Use the **Owner** role to access the "System Pulse" dashboard for full-spectrum analytics and audit logs.
 
 ---
-Created with ❤️ by **Sachin & Team** | 🛡️ *Redefining Scholarship*
+Created with ❤️ by **Sachin Sundar S** | 🛡️ *Redefining Scholarship*
