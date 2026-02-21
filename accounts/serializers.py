@@ -14,27 +14,32 @@ class UserSerializer(serializers.ModelSerializer):
             profile = obj.profile
             avatar_url = profile.avatar.url if profile.avatar else None
             
+            # Handle RENDER env vars for absolute URLs
+            render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+            is_render = os.environ.get('RENDER') == 'true'
+            
             # Fix for production media host issues
             if avatar_url and not avatar_url.startswith('http'):
                 request = self.context.get('request')
                 if request:
                     avatar_url = request.build_absolute_uri(avatar_url)
+                elif is_render and render_host:
+                    avatar_url = f"https://{render_host}{avatar_url}"
             
             # Extra robust fix: if URL still has localhost/127.0.0.1 but we are in production
             if avatar_url and ('127.0.0.1' in avatar_url or 'localhost' in avatar_url):
                 request = self.context.get('request')
+                host = None
                 if request:
                     host = request.get_host()
-                    if '127.0.0.1' not in host and 'localhost' not in host:
-                        from django.conf import settings
-                        # Replace the local part with the actual host
-                        if avatar_url.startswith('http'):
-                            # Find the start of the path
-                            from urllib.parse import urlparse
-                            parsed = urlparse(avatar_url)
-                            avatar_url = f"https://{host}{parsed.path}"
-                        else:
-                            avatar_url = f"https://{host}{avatar_url}"
+                elif is_render:
+                    host = render_host
+                
+                if host and '127.0.0.1' not in host and 'localhost' not in host:
+                    from urllib.parse import urlparse
+                    parsed = urlparse(avatar_url)
+                    # Always force HTTPS for Render
+                    avatar_url = f"https://{host}{parsed.path}"
 
             return {
                 'id': profile.id,

@@ -67,7 +67,7 @@ class AuthViewSet(viewsets.GenericViewSet):
             # Log Action
             log_action(user, 'LOGIN', 'User logged in successfully', request)
             
-            return Response(UserSerializer(user).data)
+            return Response(UserSerializer(user, context={'request': request}).data)
         
         with open('login_debug.log', 'a') as f:
             f.write("Authentication failed (authenticate returned None).\n")
@@ -87,7 +87,7 @@ class AuthViewSet(viewsets.GenericViewSet):
 
     @action(methods=['GET'], detail=False, permission_classes=[permissions.IsAuthenticated])
     def me(self, request):
-        return Response(UserSerializer(request.user).data)
+        return Response(UserSerializer(request.user, context={'request': request}).data)
 
     @action(methods=['POST'], detail=False, permission_classes=[permissions.AllowAny])
     def request_password_reset(self, request):
@@ -325,8 +325,9 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 
             return Response({
                 'detail': f'Admin {username} created successfully.',
-                'user': UserSerializer(user).data
+                'user': UserSerializer(user, context={'request': request}).data
             }, status=status.HTTP_201_CREATED)
             
         except Exception as e:
-            return Response({'detail': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            print(f"ERROR in register_admin: {str(e)}", flush=True)
+            return Response({'detail': f"Registration failed: {str(e)}"}, status=status.HTTP_400_BAD_REQUEST)
