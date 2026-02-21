@@ -11,8 +11,8 @@ const BookForm = () => {
     const [formData, setFormData] = useState({
         title: '',
         isbn: '',
-        author: '',
-        category: '',
+        author_id: '',
+        category_id: '',
         quantity: 1,
         description: '',
         published_year: new Date().getFullYear()
@@ -38,8 +38,8 @@ const BookForm = () => {
                     setFormData({
                         title: book.title || '',
                         isbn: book.isbn || '',
-                        author: book.author?.id || '',
-                        category: book.category?.id || '',
+                        author_id: book.author?.id || '',
+                        category_id: book.category?.id || '',
                         quantity: book.quantity || 1,
                         description: book.description || '',
                         published_year: book.published_year || new Date().getFullYear()
@@ -132,8 +132,8 @@ const BookForm = () => {
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-300">Author</label>
                         <select
-                            name="author"
-                            value={formData.author}
+                            name="author_id"
+                            value={formData.author_id}
                             onChange={handleChange}
                             className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 outline-none"
                             required
@@ -148,8 +148,8 @@ const BookForm = () => {
                     <div className="space-y-2">
                         <label className="block text-sm font-medium text-gray-300">Category</label>
                         <select
-                            name="category"
-                            value={formData.category}
+                            name="category_id"
+                            value={formData.category_id}
                             onChange={handleChange}
                             className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-2 focus:ring-blue-500 outline-none"
                             required

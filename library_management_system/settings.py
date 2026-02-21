@@ -15,10 +15,10 @@ _default_hosts = [
     '127.0.0.1',
     '.vercel.app',
     '.onrender.com',
-    'library-management-system-glsx.onrender.com',
 ]
 _env_hosts = [host.strip() for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if host.strip()]
-ALLOWED_HOSTS = list(dict.fromkeys(_env_hosts + _default_hosts))
+_render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+ALLOWED_HOSTS = list(dict.fromkeys(_env_hosts + _default_hosts + ([_render_host] if _render_host else [])))
 
 # Security for Production (Proxy Detection)
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
