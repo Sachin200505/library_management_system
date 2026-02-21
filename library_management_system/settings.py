@@ -141,21 +141,26 @@ SESSION_COOKIE_AGE = int(os.environ.get('DJANGO_SESSION_AGE', 60 * 60 * 24))
 SESSION_SAVE_EVERY_REQUEST = True
 
 # Production Cookie & Security Settings (Forces SameSite=None for Vercel <-> Render)
-IS_PRODUCTION = os.environ.get('RENDER') == 'true' or not DEBUG
-
-SESSION_COOKIE_SAMESITE = 'None' if IS_PRODUCTION else 'Lax'
-SESSION_COOKIE_SECURE = IS_PRODUCTION
-CSRF_COOKIE_SAMESITE = 'None' if IS_PRODUCTION else 'Lax'
-CSRF_COOKIE_SECURE = IS_PRODUCTION
-CSRF_COOKIE_HTTPONLY = False  # Critical for frontend access
+# RENDER env var is set on Render dashboard.
+IS_PRODUCTION = os.environ.get('RENDER') == 'true' or os.environ.get('DJANGO_DEBUG') == 'False'
 
 if IS_PRODUCTION:
+    DEBUG = False
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     USE_X_FORWARDED_HOST = True
     USE_X_FORWARDED_PORT = True
     SECURE_SSL_REDIRECT = True
-    # Ensure media/static URLs are absolute in production if needed
-    # but usually relative is fine once X_FORWARDED is correct.
+    SESSION_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = 'None'
+    CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = False 
+else:
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SAMESITE = 'Lax'
+    CSRF_COOKIE_SECURE = False
+    CSRF_COOKIE_HTTPONLY = False
 
 FINE_PER_DAY = float(os.environ.get('LIBRARY_FINE_PER_DAY', 5))
 ISSUE_DURATION_DAYS = int(os.environ.get('LIBRARY_ISSUE_DURATION_DAYS', 14))

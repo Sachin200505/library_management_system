@@ -80,6 +80,11 @@ class AuthViewSet(viewsets.GenericViewSet):
         logout(request)
         return Response({'detail': 'Logged out successfully'})
 
+    @action(methods=['GET'], detail=False, permission_classes=[permissions.AllowAny])
+    def csrf_token(self, request):
+        from django.middleware.csrf import get_token
+        return Response({'csrfToken': get_token(request)})
+
     @action(methods=['GET'], detail=False, permission_classes=[permissions.IsAuthenticated])
     def me(self, request):
         return Response(UserSerializer(request.user).data)
