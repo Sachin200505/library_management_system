@@ -11,14 +11,39 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_profile(self, obj):
         try:
+            profile = obj.profile
+            avatar_url = profile.avatar.url if profile.avatar else None
+            
+            # Fix for production media host issues
+            if avatar_url and not avatar_url.startswith('http'):
+                request = self.context.get('request')
+                if request:
+                    avatar_url = request.build_absolute_uri(avatar_url)
+            
+            # Extra robust fix: if URL still has localhost/127.0.0.1 but we are in production
+            if avatar_url and ('127.0.0.1' in avatar_url or 'localhost' in avatar_url):
+                request = self.context.get('request')
+                if request:
+                    host = request.get_host()
+                    if '127.0.0.1' not in host and 'localhost' not in host:
+                        from django.conf import settings
+                        # Replace the local part with the actual host
+                        if avatar_url.startswith('http'):
+                            # Find the start of the path
+                            from urllib.parse import urlparse
+                            parsed = urlparse(avatar_url)
+                            avatar_url = f"https://{host}{parsed.path}"
+                        else:
+                            avatar_url = f"https://{host}{avatar_url}"
+
             return {
-                'id': obj.profile.id,
-                'role': obj.profile.role,
-                'is_admin': obj.profile.is_admin,
-                'is_student': obj.profile.is_student,
-                'is_owner': obj.profile.is_owner,
-                'roll_number': obj.profile.roll_number,
-                'avatar': obj.profile.avatar.url if obj.profile.avatar else None
+                'id': profile.id,
+                'role': profile.role,
+                'is_admin': profile.is_admin,
+                'is_student': profile.is_student,
+                'is_owner': profile.is_owner,
+                'roll_number': profile.roll_number,
+                'avatar': avatar_url
             }
         except UserProfile.DoesNotExist:
             return None
