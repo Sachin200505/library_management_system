@@ -15,17 +15,19 @@ class UserSerializer(serializers.ModelSerializer):
             profile = obj.profile
             avatar_url = profile.avatar.url if profile.avatar else None
             
+            # Handle RENDER env vars for absolute URLs
+            render_host = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+            is_render = os.environ.get('RENDER') == 'true'
+            
             # Definitive fix for media URLs
             if avatar_url:
                 # 1. Always extract the raw media path (e.g., /media/avatars/...)
-                # This prevents double-prepending if avatar_url is already absolute
                 if '/media/' in avatar_url:
                     path = '/media/' + avatar_url.split('/media/')[-1]
                 else:
                     path = avatar_url
                 
                 # 2. Determine the correct base URL
-                # Use RENDER_EXTERNAL_HOSTNAME in production, otherwise fallback to request
                 protocol = 'https' if is_render else 'http'
                 host = render_host if is_render and render_host else None
                 
@@ -35,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
                     protocol = 'https' if request.is_secure() else 'http'
                 
                 if host:
-                    # Clean host (remove any internal protocols)
+                    # Clean host
                     host = host.replace('https://', '').replace('http://', '').strip('/')
                     avatar_url = f"{protocol}://{host}{path}"
                 elif request:
