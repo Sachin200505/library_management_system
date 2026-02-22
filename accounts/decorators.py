@@ -12,6 +12,11 @@ def role_required(required_role):
         def _wrapped_view(request, *args, **kwargs):
             if not request.user.is_authenticated:
                 return redirect('accounts:login')
+            
+            # Owners can access anything
+            if hasattr(request.user, 'profile') and request.user.profile.is_owner:
+                return view_func(request, *args, **kwargs)
+                
             if not hasattr(request.user, 'profile') or request.user.profile.role != required_role:
                 messages.error(request, 'You do not have permission to access this page.')
                 return redirect('accounts:dashboard')

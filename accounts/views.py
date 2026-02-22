@@ -57,7 +57,8 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
-    if request.user.profile.role == UserProfile.ROLE_ADMIN:
+    profile = request.user.profile
+    if profile.role in [UserProfile.ROLE_ADMIN, UserProfile.ROLE_OWNER]:
         return redirect('accounts:admin-dashboard')
     return redirect('accounts:student-dashboard')
 

@@ -27,29 +27,24 @@ class UserSerializer(serializers.ModelSerializer):
                 elif is_render and render_host:
                     avatar_url = f"https://{render_host}{avatar_url}"
             
-            # Extra robust fix: ensure we have an absolute URL pointing to the correct host
+            # Final robust fix: ensure we have an absolute URL pointing to the correct host
             if avatar_url:
-                request = self.context.get('request')
-                host = None
-                if request:
-                    host = request.get_host()
-                elif is_render:
-                    host = render_host
-
-                # If we have a host and the current URL is relative or points to local/IP
-                is_local = '127.0.0.1' in avatar_url or 'localhost' in avatar_url
-                is_relative = not avatar_url.startswith('http')
-                
-                if host and (is_local or is_relative):
-                    # Extract the path from /media/ onwards
+                # If it's already a full production URL, don't touch it
+                if render_host and avatar_url.startswith(f"https://{render_host}"):
+                    pass
+                else:
+                    # Extract the pure path from /media/ onwards
                     path = avatar_url
                     if '/media/' in avatar_url:
                         path_part = avatar_url.split('/media/')[-1]
                         path = f"/media/{path_part}"
                     
                     # Force HTTPS for the final URL in production
-                    protocol = "https" if (is_render or (request and request.is_secure())) else "http"
-                    avatar_url = f"{protocol}://{host}{path}"
+                    if is_render and render_host:
+                        avatar_url = f"https://{render_host}{path}"
+                    elif request:
+                        # Fallback for local dev or if render env not set
+                        avatar_url = request.build_absolute_uri(path)
 
             return {
                 'id': profile.id,
