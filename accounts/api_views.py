@@ -8,6 +8,10 @@ from .models import UserProfile
 from .serializers import UserSerializer, UserProfileSerializer, RegisterSerializer
 from analytics.api_views import log_action
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+@method_decorator(csrf_exempt, name='dispatch')
 class AuthViewSet(viewsets.GenericViewSet):
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterSerializer

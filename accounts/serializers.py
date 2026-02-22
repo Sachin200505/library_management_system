@@ -27,24 +27,29 @@ class UserSerializer(serializers.ModelSerializer):
                 elif is_render and render_host:
                     avatar_url = f"https://{render_host}{avatar_url}"
             
-            # Final robust fix: ensure we have an absolute URL pointing to the correct host
+            # Ultimate robust fix for media URLs
             if avatar_url:
-                # If it's already a full production URL, don't touch it
-                if render_host and avatar_url.startswith(f"https://{render_host}"):
-                    pass
-                else:
-                    # Extract the pure path from /media/ onwards
-                    path = avatar_url
-                    if '/media/' in avatar_url:
-                        path_part = avatar_url.split('/media/')[-1]
-                        path = f"/media/{path_part}"
-                    
-                    # Force HTTPS for the final URL in production
-                    if is_render and render_host:
-                        avatar_url = f"https://{render_host}{path}"
-                    elif request:
-                        # Fallback for local dev or if render env not set
-                        avatar_url = request.build_absolute_uri(path)
+                # 1. Clean up existing avatar_url - extract just the path after /media/
+                pure_path = avatar_url
+                if '/media/' in avatar_url:
+                    pure_path = '/media/' + avatar_url.split('/media/')[-1]
+                
+                # 2. Determine the correct host and protocol
+                protocol = 'https' if is_render else 'http'
+                host = render_host if is_render and render_host else None
+                
+                request = self.context.get('request')
+                if not host and request:
+                    host = request.get_host()
+                    protocol = 'https' if request.is_secure() else 'http'
+                
+                # 3. Construct the absolute URL
+                if host:
+                    # Remove any existing protocol from host if present
+                    host = host.replace('https://', '').replace('http://', '')
+                    avatar_url = f"{protocol}://{host}{pure_path}"
+                elif request:
+                    avatar_url = request.build_absolute_uri(pure_path)
 
             return {
                 'id': profile.id,

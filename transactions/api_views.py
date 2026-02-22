@@ -6,6 +6,10 @@ from .models import BookIssue, Fine
 from .serializers import BookIssueSerializer, FineSerializer
 from system_settings.utils import get_setting_value
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
+@method_decorator(csrf_exempt, name='dispatch')
 class BookIssueViewSet(viewsets.ModelViewSet):
     queryset = BookIssue.objects.all()
     serializer_class = BookIssueSerializer
