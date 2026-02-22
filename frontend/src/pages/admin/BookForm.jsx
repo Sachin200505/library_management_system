@@ -15,7 +15,9 @@ const BookForm = () => {
         category_id: '',
         quantity: 1,
         description: '',
-        published_year: new Date().getFullYear()
+        published_year: new Date().getFullYear(),
+        newAuthorName: '',
+        newCategoryName: ''
     });
 
     const [authors, setAuthors] = useState([]);
@@ -42,7 +44,9 @@ const BookForm = () => {
                         category_id: book.category?.id || '',
                         quantity: book.quantity || 1,
                         description: book.description || '',
-                        published_year: book.published_year || new Date().getFullYear()
+                        published_year: book.published_year || new Date().getFullYear(),
+                        newAuthorName: '',
+                        newCategoryName: ''
                     });
                 }
             } catch (err) {
@@ -67,15 +71,37 @@ const BookForm = () => {
         setError('');
 
         try {
+            const dataToSubmit = { ...formData };
+            delete dataToSubmit.newAuthorName;
+            delete dataToSubmit.newCategoryName;
+
+            // Handle New Author creation
+            if (formData.author_id === 'others') {
+                if (!formData.newAuthorName.trim()) {
+                    throw new Error("Please enter the new author name.");
+                }
+                const newAuthor = await BookService.createAuthor({ name: formData.newAuthorName });
+                dataToSubmit.author_id = newAuthor.id;
+            }
+
+            // Handle New Category creation
+            if (formData.category_id === 'others') {
+                if (!formData.newCategoryName.trim()) {
+                    throw new Error("Please enter the new category name.");
+                }
+                const newCategory = await BookService.createCategory({ name: formData.newCategoryName });
+                dataToSubmit.category_id = newCategory.id;
+            }
+
             if (isEditMode) {
-                await BookService.update(id, formData);
+                await BookService.update(id, dataToSubmit);
             } else {
-                await BookService.create(formData);
+                await BookService.create(dataToSubmit);
             }
             navigate('/admin/books');
         } catch (err) {
             console.error("Error saving book", err);
-            setError('Failed to save book. Please check your data.');
+            setError(err.message || 'Failed to save book. Please check your data.');
         } finally {
             setLoading(false);
         }
@@ -142,7 +168,19 @@ const BookForm = () => {
                             {authors.map(author => (
                                 <option key={author.id} value={author.id}>{author.name}</option>
                             ))}
+                            <option value="others" className="font-bold text-blue-600">+ Others (Add New)</option>
                         </select>
+                        {formData.author_id === 'others' && (
+                            <input
+                                type="text"
+                                name="newAuthorName"
+                                placeholder="Enter new author name"
+                                value={formData.newAuthorName}
+                                onChange={handleChange}
+                                className="w-full mt-2 px-4 py-2 bg-white border-2 border-blue-100 rounded-lg text-slate-900 focus:ring-2 focus:ring-blue-500 outline-none animate-in fade-in slide-in-from-top-1"
+                                required
+                            />
+                        )}
                     </div>
 
                     <div className="space-y-2">
@@ -158,7 +196,19 @@ const BookForm = () => {
                             {categories.map(category => (
                                 <option key={category.id} value={category.id}>{category.name}</option>
                             ))}
+                            <option value="others" className="font-bold text-green-600">+ Others (Add New)</option>
                         </select>
+                        {formData.category_id === 'others' && (
+                            <input
+                                type="text"
+                                name="newCategoryName"
+                                placeholder="Enter new category name"
+                                value={formData.newCategoryName}
+                                onChange={handleChange}
+                                className="w-full mt-2 px-4 py-2 bg-white border-2 border-green-100 rounded-lg text-slate-900 focus:ring-2 focus:ring-green-500 outline-none animate-in fade-in slide-in-from-top-1"
+                                required
+                            />
+                        )}
                     </div>
 
                     <div className="space-y-2">
