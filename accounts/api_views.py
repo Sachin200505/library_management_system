@@ -6,13 +6,19 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import UserProfile
 from .serializers import UserSerializer, UserProfileSerializer, RegisterSerializer
+from rest_framework.authentication import SessionAuthentication
 from analytics.api_views import log_action
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+    def enforce_csrf(self, request):
+        return  # Skip CSRF check
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 
 @method_decorator(csrf_exempt, name='dispatch')
 class AuthViewSet(viewsets.GenericViewSet):
+    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [permissions.AllowAny]
     serializer_class = RegisterSerializer
 
@@ -173,6 +179,7 @@ from analytics.api_views import log_action
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
+    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_serializer_class(self):

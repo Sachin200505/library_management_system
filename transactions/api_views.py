@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from django.utils import timezone
 from .models import BookIssue, Fine
 from .serializers import BookIssueSerializer, FineSerializer
+from accounts.api_views import CsrfExemptSessionAuthentication
 from system_settings.utils import get_setting_value
 
 from django.utils.decorators import method_decorator
@@ -13,6 +14,7 @@ from django.views.decorators.csrf import csrf_exempt
 class BookIssueViewSet(viewsets.ModelViewSet):
     queryset = BookIssue.objects.all()
     serializer_class = BookIssueSerializer
+    authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
