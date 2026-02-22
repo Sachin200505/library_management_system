@@ -63,7 +63,7 @@ const Profile = () => {
         roll_number: user?.profile?.roll_number || '',
         avatar: null
     });
-    const [preview, setPreview] = useState(user?.profile?.avatar ? (user.profile.avatar.startsWith('http') ? user.profile.avatar : `http://127.0.0.1:8000${user.profile.avatar}`) : null);
+    const [preview, setPreview] = useState(user?.profile?.avatar || null);
 
     const handleBasicChange = (e) => {
         if (e.target.name === 'avatar') {
