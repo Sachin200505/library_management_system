@@ -5,7 +5,7 @@ from rest_framework import viewsets, status, views, permissions, filters
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from .models import UserProfile
-from .serializers import UserSerializer, UserProfileSerializer, RegisterSerializer
+from .serializers import UserSerializer, UserProfileSerializer, RegisterSerializer, UserProfileUpdateSerializer
 from rest_framework.authentication import SessionAuthentication
 from analytics.api_views import log_action
 
@@ -44,9 +44,6 @@ class AuthViewSet(viewsets.GenericViewSet):
         
         # Check if login is via email
         if '@' in username:
-            try:
-                user_obj = User.objects.get(email=username)
-                username = user_obj.username
             try:
                 user_obj = User.objects.get(email=username)
                 username = user_obj.username
@@ -156,8 +153,6 @@ class AuthViewSet(viewsets.GenericViewSet):
                 return Response({'detail': 'Password has been reset successfully.'}, status=status.HTTP_200_OK)
             else:
                 return Response({'detail': 'Invalid token or user.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
