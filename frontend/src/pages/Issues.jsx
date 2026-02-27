@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import IssueService from '../services/issue.service';
 import { useAuth } from '../context/AuthContext';
-import { History, Check, X, AlertOctagon, Calendar, BookOpen, MessageSquare, User as UserIcon } from 'lucide-react';
+import { History, Check, X, AlertOctagon, Calendar, BookOpen, MessageSquare, User as UserIcon, Clock } from 'lucide-react';
 
 const Issues = () => {
     const [issues, setIssues] = useState([]);
