@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import IssueService from '../../services/issue.service';
-import { Check, X, Clock, AlertCircle } from 'lucide-react';
+import { Check, X, Clock, AlertCircle, User } from 'lucide-react';
 
 const IssueRequests = () => {
     const [requests, setRequests] = useState([]);
@@ -63,7 +63,8 @@ const IssueRequests = () => {
             </div>
 
             <div className="glass-card bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-100">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
@@ -99,21 +100,58 @@ const IssueRequests = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {requests.length === 0 && (
-                                <tr>
-                                    <td colSpan="4" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                                <Clock className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="font-medium">No pending requests.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {requests.map((request) => (
+                        <div key={request.id} className="p-4 space-y-4">
+                            <div className="space-y-2">
+                                <div className="flex justify-between items-start">
+                                    <h3 className="font-bold text-slate-900 leading-tight flex-1">{request.book?.title}</h3>
+                                    <span className="text-[10px] text-slate-400 font-bold bg-slate-50 px-2 py-0.5 rounded border border-slate-100">
+                                        ID: #{request.id}
+                                    </span>
+                                </div>
+                                <div className="flex items-center gap-3 text-sm">
+                                    <div className="flex items-center gap-1.5 text-blue-600 font-semibold bg-blue-50 px-2.5 py-1 rounded-lg">
+                                        <User className="w-3.5 h-3.5" /> {request.user?.username}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 text-slate-400 font-medium">
+                                        <Clock className="w-3.5 h-3.5" /> {new Date(request.created_at || Date.now()).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 pt-2">
+                                <button
+                                    onClick={() => handleApprove(request.id)}
+                                    className="flex-1 py-2.5 bg-green-600 text-white font-bold rounded-xl shadow-lg shadow-green-500/20 flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                >
+                                    <Check className="w-4 h-4" /> Approve
+                                </button>
+                                <button
+                                    onClick={() => handleReject(request.id)}
+                                    className="flex-1 py-2.5 bg-red-50 text-red-600 font-bold rounded-xl border border-red-100 flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                >
+                                    <X className="w-4 h-4" /> Reject
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {requests.length === 0 && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                <Clock className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="font-medium">No pending requests.</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

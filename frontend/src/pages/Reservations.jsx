@@ -51,7 +51,8 @@ const Reservations = () => {
             </div>
 
             <div className="glass-card bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-100">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
@@ -100,25 +101,61 @@ const Reservations = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {reservations.length === 0 && (
-                                <tr>
-                                    <td colSpan="4" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                                <Clock className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="font-medium text-slate-700">No active reservations.</p>
-                                            <p className="text-sm text-slate-500 mt-1 max-w-xs text-center">
-                                                Reservations are for out-of-stock books. <br />
-                                                If you requested an available book, check <Link to="/issues" className="text-primary-600 hover:underline">Issues & Returns</Link>.
-                                            </p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {reservations.map((reservation) => (
+                        <div key={reservation.id} className="p-4 space-y-4">
+                            <div className="flex items-start gap-3">
+                                <div className="p-2 bg-blue-50 rounded-lg text-blue-500 mt-1">
+                                    <BookOpen className="w-5 h-5" />
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <h3 className="font-bold text-slate-900 leading-tight">{reservation.book?.title || 'Unknown Title'}</h3>
+                                    <div className="flex items-center gap-2 mt-1.5">
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border
+                                            ${reservation.status === 'ACTIVE' ? 'bg-green-100 text-green-700 border-green-200' :
+                                                reservation.status === 'COMPLETED' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                                                    'bg-red-100 text-red-700 border-red-200'
+                                            }`}>
+                                            {reservation.status}
+                                        </span>
+                                        <span className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                                            <Clock className="w-3 h-3" /> {new Date(reservation.created_at).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            {reservation.status === 'ACTIVE' && (
+                                <button
+                                    onClick={() => handleCancel(reservation.id)}
+                                    className="w-full py-2.5 bg-red-50 text-red-600 font-bold rounded-xl border border-red-100 flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                >
+                                    <XCircle className="w-4 h-4" /> Cancel Reservation
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+
+                {/* Empty State */}
+                {reservations.length === 0 && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                <Clock className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="font-medium text-slate-700">No active reservations.</p>
+                            <p className="text-sm text-slate-500 mt-1 max-w-xs mx-auto">
+                                Reservations are for out-of-stock books. <br />
+                                If you requested an available book, check <Link to="/issues" className="text-primary-600 hover:underline">Issues & Returns</Link>.
+                            </p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div >
     );

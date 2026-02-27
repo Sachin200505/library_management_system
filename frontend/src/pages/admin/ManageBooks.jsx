@@ -100,7 +100,8 @@ const ManageBooks = () => {
             </div>
 
             <div className="glass-card bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-100">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
@@ -157,21 +158,62 @@ const ManageBooks = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {books.length === 0 && (
-                                <tr>
-                                    <td colSpan="5" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                                <BookOpen className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="font-medium">No books found.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {books.map((book) => (
+                        <div key={book.id} className="p-4 space-y-4">
+                            <div className="flex justify-between items-start gap-4">
+                                <div className="space-y-1 flex-1">
+                                    <h3 className="font-bold text-slate-900 leading-tight">{book.title}</h3>
+                                    <p className="text-sm text-slate-500 font-medium">by {book.author?.name}</p>
+                                    <div className="flex flex-wrap gap-2 mt-2">
+                                        <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-bold border border-slate-200 uppercase tracking-wider">
+                                            {book.category?.name}
+                                        </span>
+                                        <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px] font-mono font-bold border border-blue-100 uppercase tracking-wider">
+                                            ISBN: {book.isbn}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="text-right shrink-0">
+                                    <div className={`px-2 py-1 rounded-lg text-[10px] font-black border text-center uppercase tracking-tighter ${book.available_count > 0 ? 'bg-green-50 text-green-700 border-green-100' : 'bg-red-50 text-red-700 border-red-100'}`}>
+                                        <div className="text-xs leading-none mb-1">{book.available_count} / {book.quantity}</div>
+                                        <div>Stock</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 pt-2">
+                                <Link
+                                    to={`/admin/books/edit/${book.id}`}
+                                    className="flex-1 py-2.5 bg-blue-50 text-blue-600 font-bold rounded-xl border border-blue-100 flex items-center justify-center gap-2 active:scale-95 transition-all"
+                                >
+                                    <Edit2 className="w-4 h-4" /> Edit Book
+                                </Link>
+                                <button
+                                    onClick={() => handleDelete(book.id)}
+                                    className="p-2.5 bg-red-50 text-red-600 border border-red-100 rounded-xl active:scale-95 transition-all"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {books.length === 0 && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                <BookOpen className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="font-medium">No books found.</p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Pagination Controls */}

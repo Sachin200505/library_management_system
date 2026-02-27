@@ -150,7 +150,8 @@ const Extensions = () => {
             )}
 
             <div className="glass-card bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-100">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
@@ -187,21 +188,66 @@ const Extensions = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {requests.length === 0 && (
-                                <tr>
-                                    <td colSpan="4" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                                <Clock className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="font-medium">No extension requests found.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {requests.map((req) => (
+                        <div key={req.id} className="p-4 space-y-4">
+                            <div className="flex justify-between items-start">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200 text-slate-500">
+                                        <Clock className="w-5 h-5 text-blue-500" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-slate-900 leading-tight">Extension Request</h3>
+                                        <div className="flex items-center gap-1.5 text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">
+                                            <Calendar className="w-3 h-3" /> {new Date(req.created_at).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </div>
+                                <span className={`px-2 py-0.5 rounded-full text-[10px] font-black border uppercase tracking-widest ${req.status === 'APPROVED' ? 'bg-green-100 text-green-700 border-green-200' :
+                                    req.status === 'REJECTED' ? 'bg-red-100 text-red-700 border-red-200' :
+                                        'bg-amber-100 text-amber-700 border-amber-200'
+                                    }`}>
+                                    {req.status}
+                                </span>
+                            </div>
+
+                            <div className="bg-blue-50/50 p-3 rounded-xl border border-blue-100/50 flex items-center gap-3">
+                                <BookOpen className="w-4 h-4 text-blue-500 shrink-0" />
+                                <div className="min-w-0">
+                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider mb-0.5">Book Title</p>
+                                    <p className="text-sm font-bold text-slate-800 truncate">{req.issue_book_title || 'Unknown Title'}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex gap-4">
+                                <div className="flex-1 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider mb-1">Requested</p>
+                                    <p className="text-sm font-bold text-slate-800">{req.days_requested} Days</p>
+                                </div>
+                                <div className="flex-1 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-wider mb-1">Reason</p>
+                                    <p className="text-xs text-slate-600 font-medium truncate" title={req.reason}>{req.reason || 'None'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {requests.length === 0 && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                <Clock className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="font-medium">No extension requests found.</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

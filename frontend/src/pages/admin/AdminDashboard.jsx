@@ -65,18 +65,18 @@ const AdminDashboard = () => {
 
     return (
         <div className="space-y-8 animate-fade-in pb-10">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                 <div>
-                    <h1 className="text-4xl font-bold text-slate-800 font-heading">Admin Dashboard</h1>
-                    <p className="text-slate-500 mt-1">Overview of library system performance</p>
+                    <h1 className="text-4xl font-black text-slate-800 font-heading tracking-tight">Admin Dashboard</h1>
+                    <p className="text-slate-500 mt-1 font-medium ml-1">Overview of library system performance and core metrics.</p>
                 </div>
-                <div className="flex gap-4">
-                    <Link to="/admin/reports" className="px-5 py-2.5 bg-white text-slate-700 border border-slate-200 rounded-xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm font-medium flex items-center gap-2">
-                        <ClipboardList className="w-4 h-4" />
+                <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+                    <Link to="/admin/reports" className="px-6 py-3 bg-white text-slate-700 border border-slate-200 rounded-2xl hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm font-bold flex items-center justify-center gap-2">
+                        <ClipboardList className="w-5 h-5 opacity-70" />
                         Generate Reports
                     </Link>
-                    <Link to="/admin/settings" className="px-5 py-2.5 bg-primary-600 text-white rounded-xl hover:bg-primary-700 transition-all shadow-lg shadow-primary-500/30 font-medium flex items-center gap-2">
-                        <Settings className="w-4 h-4" />
+                    <Link to="/admin/settings" className="px-6 py-3 bg-primary-600 text-white rounded-2xl hover:bg-primary-700 transition-all shadow-xl shadow-primary-500/30 font-bold flex items-center justify-center gap-2">
+                        <Settings className="w-5 h-5" />
                         System Settings
                     </Link>
                 </div>

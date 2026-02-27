@@ -114,7 +114,7 @@ const Sidebar = () => {
             <div className="p-4 border-t border-slate-200 bg-slate-50/50">
                 <Link to="/profile" className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white transition-colors border border-transparent hover:border-slate-200 hover:shadow-sm cursor-pointer mb-2 group">
                     <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center border border-white shadow-sm overflow-hidden bg-cover bg-center shrink-0"
-                        style={user?.profile?.avatar ? { backgroundImage: `url(http://127.0.0.1:8000${user.profile.avatar})` } : {}}>
+                        style={user?.profile?.avatar ? { backgroundImage: `url(${user.profile.avatar})` } : {}}>
                         {!user?.profile?.avatar && <User className="w-4 h-4 text-slate-500 group-hover:text-blue-600" />}
                     </div>
                     <div className="flex-1 min-w-0">

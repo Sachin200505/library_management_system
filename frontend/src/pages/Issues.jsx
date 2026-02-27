@@ -72,7 +72,8 @@ const Issues = () => {
             </div>
 
             <div className="glass-card bg-white rounded-2xl overflow-hidden shadow-xl border border-slate-100">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead className="bg-slate-50 border-b border-slate-200">
                             <tr>
@@ -151,41 +152,122 @@ const Issues = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {issues.length === 0 && (
-                                <tr>
-                                    <td colSpan="7" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center justify-center">
-                                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                                                <History className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="text-lg font-medium">No history found</p>
-                                            <p className="text-sm text-slate-400">You haven't issued or requested any books yet.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
 
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {currentItems.map((issue) => (
+                        <div key={issue.id} className="p-4 space-y-4 hover:bg-slate-50/50 transition-colors">
+                            <div className="flex justify-between items-start">
+                                <div className="flex items-start gap-3">
+                                    <div className="p-2 bg-blue-50 rounded-lg text-blue-500 mt-1 flex-shrink-0">
+                                        <BookOpen className="w-5 h-5" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-slate-900 leading-tight">{issue.book?.title || 'Unknown Title'}</h3>
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold border
+                                                ${issue.status === 'ISSUED' ? 'bg-green-100 text-green-700 border-green-200' :
+                                                    issue.status === 'RETURNED' ? 'bg-blue-100 text-blue-700 border-blue-200' :
+                                                        issue.status === 'REQUESTED' ? 'bg-amber-100 text-amber-700 border-amber-200' :
+                                                            'bg-red-100 text-red-700 border-red-200'
+                                                }`}>
+                                                {issue.status}
+                                            </span>
+                                            {issue.is_overdue && (
+                                                <span className="px-2 py-0.5 bg-red-50 text-red-600 text-[10px] font-bold rounded-full border border-red-200 flex items-center gap-1">
+                                                    <AlertOctagon className="w-3 h-3" /> Overdue
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 rounded-xl p-3 grid grid-cols-2 gap-3 text-xs">
+                                <div>
+                                    <p className="text-slate-400 font-bold uppercase tracking-wider mb-1">Issued On</p>
+                                    <p className="text-slate-700 font-semibold flex items-center gap-1.5">
+                                        <Calendar className="w-3 h-3" /> {issue.issue_date || '-'}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p className="text-slate-400 font-bold uppercase tracking-wider mb-1">Due Date</p>
+                                    <p className="text-orange-600 font-semibold flex items-center gap-1.5">
+                                        <Clock className="w-3 h-3" /> {issue.due_date || '-'}
+                                    </p>
+                                </div>
+                                {user?.profile?.is_admin && (
+                                    <div className="col-span-2 pt-2 border-t border-slate-200/50">
+                                        <p className="text-slate-400 font-bold uppercase tracking-wider mb-1">Issued To</p>
+                                        <div className="flex items-center gap-2 text-slate-700 font-semibold">
+                                            <UserIcon className="w-3 h-3 text-blue-500" />
+                                            {issue.user?.username}
+                                        </div>
+                                    </div>
+                                )}
+                                {issue.return_date && (
+                                    <div className="col-span-2 pt-2 border-t border-slate-200/50">
+                                        <p className="text-slate-400 font-bold uppercase tracking-wider mb-1">Returned On</p>
+                                        <p className="text-green-600 font-semibold">{issue.return_date}</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            <div className="pt-2">
+                                {user?.profile?.is_admin && issue.status === 'ISSUED' && (
+                                    <button
+                                        onClick={() => handleReturn(issue.id)}
+                                        className="w-full py-2.5 bg-blue-600 text-white font-bold rounded-xl shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                                    >
+                                        Mark Returned
+                                    </button>
+                                )}
+                                {user?.profile?.is_student && issue.status === 'RETURNED' && (
+                                    <button
+                                        onClick={() => navigate(`/books/${issue.book.id}`)}
+                                        className="w-full py-2.5 bg-white border border-blue-200 text-blue-600 font-bold rounded-xl active:scale-95 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        <MessageSquare className="w-4 h-4" /> Review Book
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {issues.length === 0 && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                <History className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="text-lg font-medium">No history found</p>
+                            <p className="text-sm text-slate-400">You haven't issued or requested any books yet.</p>
+                        </div>
+                    </div>
+                )}
+
                 {/* Pagination Controls */}
                 {sortedIssues.length > itemsPerPage && (
-                    <div className="flex justify-between items-center px-6 py-4 bg-slate-50 border-t border-slate-200">
-                        <span className="text-sm text-slate-500">
+                    <div className="flex flex-col sm:flex-row justify-between items-center px-6 py-4 bg-slate-50 border-t border-slate-200 gap-4">
+                        <span className="text-sm text-slate-500 text-center sm:text-left">
                             Showing <span className="font-bold">{indexOfFirstItem + 1}</span> to <span className="font-bold">{Math.min(indexOfLastItem, sortedIssues.length)}</span> of <span className="font-bold">{sortedIssues.length}</span> entries
                         </span>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 w-full sm:w-auto">
                             <button
                                 onClick={prevPage}
                                 disabled={currentPage === 1}
-                                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="flex-1 sm:flex-none px-6 py-2 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all"
                             >
                                 Previous
                             </button>
                             <button
                                 onClick={nextPage}
                                 disabled={currentPage === totalPages}
-                                className="px-4 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                className="flex-1 sm:flex-none px-6 py-2 text-sm font-bold text-slate-600 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm transition-all"
                             >
                                 Next
                             </button>

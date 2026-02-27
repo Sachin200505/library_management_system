@@ -44,16 +44,18 @@ const Suggestions = () => {
 
     return (
         <div className="space-y-6 pb-10 animate-fade-in">
-            <div className="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-200 shadow-sm sticky top-20 md:top-0 z-30">
-                <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2 tracking-tight">
-                    <Lightbulb className="text-yellow-500 w-6 h-6" />
+            <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-sm gap-4 sticky top-0 z-20">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-3 tracking-tight">
+                    <div className="p-2 bg-yellow-50 rounded-lg">
+                        <Lightbulb className="text-yellow-600 w-6 h-6 md:w-8 md:h-8" />
+                    </div>
                     Book Suggestions
                 </h1>
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="flex items-center gap-2 px-4 py-2 bg-yellow-50 text-yellow-700 hover:bg-yellow-100 border border-yellow-200 rounded-lg transition-colors font-medium text-sm"
+                    className="flex items-center justify-center gap-2 px-6 py-2.5 bg-yellow-500 hover:bg-yellow-600 text-white font-bold rounded-xl shadow-lg shadow-yellow-500/30 transition-all active:scale-95 w-full sm:w-auto"
                 >
-                    <Plus className="w-4 h-4" />
+                    <Plus className="w-5 h-5" />
                     Suggest Book
                 </button>
             </div>

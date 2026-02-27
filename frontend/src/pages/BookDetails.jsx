@@ -88,37 +88,39 @@ const BookDetails = () => {
     if (!book) return <div className="text-center p-10 text-slate-500">Book not found</div>;
 
     return (
-        <div className="max-w-5xl mx-auto space-y-6 pb-10">
+        <div className="max-w-5xl mx-auto space-y-6 pb-12 animate-fade-in">
             <button
                 onClick={() => navigate('/books')}
-                className="flex items-center text-slate-500 hover:text-slate-800 transition-colors font-medium"
+                className="flex items-center text-slate-500 hover:text-slate-800 transition-all font-medium group"
             >
-                <ArrowLeft className="w-5 h-5 mr-2" />
+                <div className="p-2 bg-slate-100 rounded-lg mr-3 group-hover:bg-slate-200 transition-colors">
+                    <ArrowLeft className="w-5 h-5" />
+                </div>
                 Back to Catalog
             </button>
 
-            <div className="card overflow-hidden">
-                <div className="md:flex">
+            <div className="card overflow-hidden shadow-2xl border-none ring-1 ring-slate-200">
+                <div className="flex flex-col lg:flex-row">
                     {/* Book Cover / Visual Placeholder */}
-                    <div className="md:w-1/3 p-8 bg-slate-50 flex items-center justify-center border-r border-slate-100">
-                        <div className="w-48 h-64 bg-white rounded-lg shadow-md border border-slate-200 flex flex-col items-center justify-center p-6 text-center">
-                            <Book className="w-16 h-16 text-slate-300 mb-4" />
-                            <div className="space-y-2">
-                                <div className="h-2 w-24 bg-slate-100 rounded mx-auto"></div>
-                                <div className="h-2 w-16 bg-slate-100 rounded mx-auto"></div>
-                                <div className="h-2 w-20 bg-slate-100 rounded mx-auto"></div>
+                    <div className="lg:w-1/3 p-10 bg-slate-50 flex items-center justify-center border-b lg:border-b-0 lg:border-r border-slate-100">
+                        <div className="w-48 h-64 bg-white rounded-2xl shadow-xl border border-slate-200 flex flex-col items-center justify-center p-6 text-center transform hover:scale-105 transition-transform duration-300">
+                            <Book className="w-16 h-16 text-blue-100 mb-4" />
+                            <div className="space-y-2 opacity-20">
+                                <div className="h-2 w-24 bg-slate-200 rounded mx-auto"></div>
+                                <div className="h-2 w-16 bg-slate-200 rounded mx-auto"></div>
+                                <div className="h-2 w-20 bg-slate-200 rounded mx-auto"></div>
                             </div>
                         </div>
                     </div>
 
                     {/* Book Info */}
-                    <div className="p-8 md:w-2/3">
-                        <div className="flex justify-between items-start mb-4">
+                    <div className="p-8 lg:w-2/3 space-y-8">
+                        <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                             <div>
-                                <h1 className="text-3xl font-bold text-slate-900 leading-tight mb-2">{book.title}</h1>
-                                <p className="text-lg text-slate-600 font-medium">{book.author?.name || 'Unknown Author'}</p>
+                                <h1 className="text-3xl lg:text-4xl font-black text-slate-900 leading-tight mb-2 font-heading tracking-tight">{book.title}</h1>
+                                <p className="text-xl text-slate-500 font-medium">by <span className="text-slate-800 font-bold">{book.author?.name || 'Unknown Author'}</span></p>
                             </div>
-                            <div className={`px-4 py-1.5 rounded-full text-sm font-bold border ${book.available_count > 0
+                            <div className={`px-5 py-2 rounded-2xl text-xs font-black border uppercase tracking-widest shadow-sm ${book.available_count > 0
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-100'
                                 : 'bg-red-50 text-red-700 border-red-100'
                                 }`}>
@@ -126,52 +128,60 @@ const BookDetails = () => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-y-4 gap-x-8 text-sm text-slate-600 mb-8 border-y border-slate-100 py-6">
-                            <div className="flex items-center">
-                                <Tag className="w-4 h-4 mr-2.5 text-slate-400" />
-                                <span className="font-semibold w-24">Category:</span>
-                                <span>{book.category?.name || 'General'}</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-slate-600 bg-slate-50 p-6 rounded-2xl border border-slate-100">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-white rounded-lg shadow-sm">
+                                    <Tag className="w-4 h-4 text-blue-500" />
+                                </div>
+                                <span className="font-bold w-20 uppercase text-[10px] tracking-wider text-slate-400">Category</span>
+                                <span className="font-bold text-slate-700">{book.category?.name || 'General'}</span>
                             </div>
-                            <div className="flex items-center">
-                                <span className="w-4 h-4 mr-2.5 flex items-center justify-center font-mono text-xs font-bold text-slate-400 border border-slate-300 rounded">#</span>
-                                <span className="font-semibold w-24">ISBN:</span>
-                                <span className="font-mono">{book.isbn}</span>
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-white rounded-lg shadow-sm">
+                                    <span className="text-[10px] font-black text-blue-400">#</span>
+                                </div>
+                                <span className="font-bold w-20 uppercase text-[10px] tracking-wider text-slate-400">ISBN</span>
+                                <span className="font-mono font-bold text-slate-700">{book.isbn}</span>
                             </div>
-                            <div className="flex items-center">
-                                <Calendar className="w-4 h-4 mr-2.5 text-slate-400" />
-                                <span className="font-semibold w-24">Published:</span>
-                                <span>{book.published_year}</span>
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-white rounded-lg shadow-sm">
+                                    <Calendar className="w-4 h-4 text-blue-500" />
+                                </div>
+                                <span className="font-bold w-20 uppercase text-[10px] tracking-wider text-slate-400">Published</span>
+                                <span className="font-bold text-slate-700">{book.published_year}</span>
                             </div>
-                            <div className="flex items-center">
-                                <Book className="w-4 h-4 mr-2.5 text-slate-400" />
-                                <span className="font-semibold w-24">Quantity:</span>
-                                <span>{book.quantity} copies</span>
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 bg-white rounded-lg shadow-sm">
+                                    <Library className="w-4 h-4 text-blue-500" />
+                                </div>
+                                <span className="font-bold w-20 uppercase text-[10px] tracking-wider text-slate-400">Inventory</span>
+                                <span className="font-bold text-slate-700">{book.quantity} copies</span>
                             </div>
                         </div>
 
-                        <div className="mb-8">
-                            <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide mb-2">Description</h3>
-                            <p className="text-slate-600 leading-relaxed">
-                                {book.description || "No description avaiable for this book."}
+                        <div>
+                            <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-3 ml-1">About this book</h3>
+                            <p className="text-slate-600 leading-relaxed font-medium bg-white p-6 rounded-2xl border border-slate-100 shadow-inner italic">
+                                "{book.description || "No description avaiable for this book."}"
                             </p>
                         </div>
 
                         {/* Actions */}
                         {user?.profile?.is_student && (
-                            <div className="flex gap-4">
+                            <div className="flex flex-col sm:flex-row gap-4 pt-4">
                                 {book.available_count > 0 ? (
                                     <button
                                         onClick={handleRequest}
                                         disabled={requestStatus === 'requested'}
-                                        className={`px-6 py-3 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2 min-w-[200px]
+                                        className={`flex-1 py-4 rounded-2xl text-base font-bold transition-all shadow-xl flex items-center justify-center gap-3
                                             ${requestStatus === 'requested'
-                                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200 cursor-default'
-                                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/20 active:scale-95'
+                                                ? 'bg-emerald-50 text-emerald-700 border-2 border-emerald-100 cursor-default'
+                                                : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-500/30 active:scale-95'
                                             }`}
                                     >
                                         {requestStatus === 'requested' ? (
                                             <>
-                                                <Check className="w-5 h-5" /> Requested
+                                                <CheckCircle className="w-6 h-6" /> Requested Successfully
                                             </>
                                         ) : (
                                             <>Request to Borrow</>
@@ -181,22 +191,22 @@ const BookDetails = () => {
                                     <button
                                         onClick={handleReserve}
                                         disabled={requestStatus === 'reserved'}
-                                        className={`px-6 py-3 rounded-lg text-sm font-bold transition-all shadow-sm flex items-center justify-center gap-2 min-w-[200px]
+                                        className={`flex-1 py-4 rounded-2xl text-base font-bold transition-all shadow-xl flex items-center justify-center gap-3
                                             ${requestStatus === 'reserved'
-                                                ? 'bg-purple-50 text-purple-700 border border-purple-200 cursor-default'
-                                                : 'bg-white text-purple-700 border border-purple-200 hover:bg-purple-50'
+                                                ? 'bg-purple-50 text-purple-700 border-2 border-purple-100 cursor-default'
+                                                : 'bg-white text-purple-700 border-2 border-purple-100 hover:bg-purple-50 active:scale-95'
                                             }`}
                                     >
-                                        <Clock className="w-5 h-5" />
-                                        {requestStatus === 'reserved' ? 'Reserved' : 'Reserve Book'}
+                                        <Clock className="w-6 h-6" />
+                                        {requestStatus === 'reserved' ? 'Reserved Successfully' : 'Reserve Book'}
                                     </button>
                                 )}
                             </div>
                         )}
 
                         {user?.profile?.is_admin && (
-                            <div className="flex gap-4">
-                                <button className="px-6 py-3 bg-white border border-slate-200 text-slate-700 font-bold rounded-lg hover:bg-slate-50 transition-colors">
+                            <div className="pt-4">
+                                <button className="w-full sm:w-auto px-8 py-4 bg-white border-2 border-slate-200 text-slate-700 font-bold rounded-2xl hover:bg-slate-50 transition-all active:scale-95 shadow-sm">
                                     Edit Book Details
                                 </button>
                             </div>

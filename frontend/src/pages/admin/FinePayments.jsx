@@ -35,7 +35,8 @@ const FinePayments = () => {
             </div>
 
             <div className="card overflow-hidden">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-slate-200">
@@ -98,21 +99,66 @@ const FinePayments = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {payments.length === 0 && !loading && (
-                                <tr>
-                                    <td colSpan="5" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                                                <IndianRupee className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="font-medium">No payment records found.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {payments.map((payment) => (
+                        <div key={payment.id} className="p-4 space-y-4">
+                            <div className="flex justify-between items-start">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center border border-slate-200">
+                                        <User className="w-5 h-5 text-slate-400" />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-slate-900">{payment.user_username}</h3>
+                                        <div className="text-[10px] text-slate-400 font-bold flex items-center gap-1.5 uppercase mt-1">
+                                            <Calendar className="w-3 h-3" /> {new Date(payment.created_at).toLocaleDateString()}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="font-mono font-black text-emerald-600 text-xl leading-none">
+                                        <span>₹</span>{payment.amount}
+                                    </div>
+                                    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black border uppercase tracking-wider mt-2 ${payment.status === 'COMPLETED' || payment.status === 'PAID'
+                                        ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
+                                        payment.status === 'FAILED'
+                                            ? 'bg-red-50 text-red-700 border-red-100' :
+                                            'bg-amber-50 text-amber-700 border-amber-100'
+                                        }`}>
+                                        {payment.status}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 rounded-xl p-3 flex justify-between items-center border border-slate-100">
+                                <div className="flex items-center gap-2 text-xs font-bold text-slate-600">
+                                    <CreditCard className="w-4 h-4 text-slate-400" />
+                                    {payment.mode}
+                                </div>
+                                {payment.reference && (
+                                    <div className="text-[10px] font-mono text-slate-400">
+                                        Ref: {payment.reference}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {payments.length === 0 && !loading && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-4">
+                                <IndianRupee className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="font-medium">No payment records found.</p>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

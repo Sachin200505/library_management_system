@@ -166,7 +166,8 @@ const ManageUsers = () => {
             </div>
 
             <div className="card overflow-hidden">
-                <div className="overflow-x-auto">
+                {/* Desktop Table View */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-slate-200">
@@ -249,21 +250,90 @@ const ManageUsers = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {users.length === 0 && !loading && (
-                                <tr>
-                                    <td colSpan="6" className="px-6 py-16 text-center text-slate-500">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                                                <User className="w-8 h-8 text-slate-300" />
-                                            </div>
-                                            <p className="font-medium">No users found.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Card View */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {users.map((user) => (
+                        <div key={user.id} className="p-4 space-y-4">
+                            <div className="flex justify-between items-start">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold border border-slate-200">
+                                        {user.username.charAt(0).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-slate-900">{user.username}</h3>
+                                        <div className="flex items-center gap-2 mt-1">
+                                            <span className={`px-2 py-0.5 rounded-full text-[10px] font-black border uppercase tracking-wider ${user.profile?.role === 'OWNER' ? 'bg-yellow-50 text-yellow-700 border-yellow-100' :
+                                                user.profile?.role === 'ADMIN' ? 'bg-purple-50 text-purple-700 border-purple-100' :
+                                                    'bg-blue-50 text-blue-700 border-blue-100'
+                                                }`}>
+                                                {user.profile?.role || 'STUDENT'}
+                                            </span>
+                                            {user.is_active ? (
+                                                <span className="flex items-center gap-1 text-emerald-600 text-[10px] font-bold">
+                                                    <CheckCircle className="w-3 h-3" /> ACTIVE
+                                                </span>
+                                            ) : (
+                                                <span className="flex items-center gap-1 text-red-600 text-[10px] font-bold">
+                                                    <XCircle className="w-3 h-3" /> INACTIVE
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="text-[10px] text-slate-400 font-bold bg-slate-50 px-2 py-1 rounded border border-slate-100">
+                                    ID: #{user.id}
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 text-[11px]">
+                                <div className="space-y-1">
+                                    <p className="text-slate-400 font-bold uppercase tracking-wider">Email</p>
+                                    <p className="text-slate-700 font-medium truncate">{user.email || 'N/A'}</p>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-slate-400 font-bold uppercase tracking-wider">Joined</p>
+                                    <p className="text-slate-700 font-medium">{new Date(user.date_joined).toLocaleDateString()}</p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 pt-2">
+                                <button
+                                    onClick={() => handleToggleActivation(user)}
+                                    className={`flex-1 py-2 rounded-xl font-bold flex items-center justify-center gap-2 border transition-all active:scale-95 ${user.is_active ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-emerald-50 text-emerald-600 border-emerald-100'}`}
+                                >
+                                    <Power className="w-4 h-4" /> {user.is_active ? 'Deactivate' : 'Activate'}
+                                </button>
+                                <button
+                                    onClick={() => { setSelectedUser(user); setShowPasswordModal(true); }}
+                                    className="p-2 bg-blue-50 text-blue-600 border border-blue-100 rounded-xl active:scale-95 transition-all"
+                                >
+                                    <Key className="w-5 h-5" />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(user)}
+                                    className="p-2 bg-red-50 text-red-600 border border-red-100 rounded-xl active:scale-95 transition-all"
+                                >
+                                    <Trash2 className="w-5 h-5" />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {users.length === 0 && !loading && (
+                    <div className="px-6 py-16 text-center text-slate-500">
+                        <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
+                                <User className="w-8 h-8 text-slate-300" />
+                            </div>
+                            <p className="font-medium">No users found.</p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Change Password Modal */}

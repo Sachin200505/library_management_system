@@ -49,17 +49,19 @@ const Notifications = () => {
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto pb-10 animate-fade-in">
-            <div className="flex justify-between items-center bg-white p-6 rounded-xl border border-slate-200 shadow-sm sticky top-20 md:top-0 z-30">
-                <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2 tracking-tight">
-                    <Bell className="text-blue-600 w-6 h-6" />
+            <div className="flex flex-col sm:flex-row justify-between items-center bg-white p-4 md:p-6 rounded-2xl border border-slate-200 shadow-sm gap-4 sticky top-0 z-20">
+                <h1 className="text-2xl md:text-3xl font-bold text-slate-900 flex items-center gap-3 tracking-tight">
+                    <div className="p-2 bg-blue-50 rounded-lg">
+                        <Bell className="text-blue-600 w-6 h-6 md:w-8 md:h-8" />
+                    </div>
                     Notifications
                 </h1>
                 {notifications.some(n => !n.is_read) && (
                     <button
                         onClick={handleMarkAllRead}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors font-medium text-sm"
+                        className="flex items-center justify-center gap-2 px-6 py-2.5 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 rounded-xl transition-all font-bold text-sm w-full sm:w-auto active:scale-95"
                     >
-                        <Check className="w-4 h-4" />
+                        <Check className="w-5 h-5" />
                         Mark All Read
                     </button>
                 )}

@@ -73,7 +73,9 @@ const Fines = () => {
                         <p className="text-sm text-slate-500">Fines that need to be paid</p>
                     </div>
                 </div>
-                <div className="overflow-x-auto">
+
+                {/* Desktop Table: Unpaid Fines */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-slate-200">
@@ -109,22 +111,49 @@ const Fines = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {unpaidFines.length === 0 && !loading && (
-                                <tr>
-                                    <td colSpan="4" className="px-6 py-12 text-center text-slate-500">
-                                        <div className="flex flex-col items-center">
-                                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
-                                                <CheckCircle2 className="w-8 h-8 text-emerald-500" />
-                                            </div>
-                                            <p className="font-bold text-slate-800">No outstanding fines!</p>
-                                            <p className="text-sm text-slate-500">You are all clear.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Cards: Unpaid Fines */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {unpaidFines.map((fine) => (
+                        <div key={fine.id} className="p-4 space-y-4">
+                            <div className="flex justify-between items-start">
+                                <div className="space-y-1">
+                                    <h3 className="font-bold text-slate-900 leading-tight">{fine.issue?.book?.title || 'Unknown'}</h3>
+                                    <p className="text-[10px] text-slate-500 flex items-center gap-1.5 uppercase font-bold tracking-wider">
+                                        <Calendar className="w-3 h-3" /> {new Date(fine.created_at).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className="text-right">
+                                    <div className="font-mono font-black text-red-600 text-xl">
+                                        <span>₹</span>{fine.amount}
+                                    </div>
+                                    <p className="text-[10px] text-red-400 font-bold uppercase tracking-tighter">Fine Amount</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => initiatePayment(fine)}
+                                className="w-full py-3 bg-emerald-600 text-white font-bold rounded-xl shadow-lg shadow-emerald-500/20 active:scale-95 transition-all flex items-center justify-center gap-2"
+                            >
+                                <CreditCard className="w-5 h-5" /> Pay Now
+                            </button>
+                        </div>
+                    ))}
+                </div>
+
+                {unpaidFines.length === 0 && !loading && (
+                    <div className="px-6 py-12 text-center text-slate-500">
+                        <div className="flex flex-col items-center">
+                            <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-4">
+                                <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+                            </div>
+                            <p className="font-bold text-slate-800">No outstanding fines!</p>
+                            <p className="text-sm text-slate-500">You are all clear.</p>
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Payment History Section */}
@@ -138,7 +167,9 @@ const Fines = () => {
                         <p className="text-sm text-slate-500">Past transactions and receipts</p>
                     </div>
                 </div>
-                <div className="overflow-x-auto">
+
+                {/* Desktop Table: History */}
+                <div className="hidden md:block overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-slate-50 border-b border-slate-200">
@@ -179,16 +210,44 @@ const Fines = () => {
                                     </td>
                                 </tr>
                             ))}
-                            {payments.length === 0 && !loading && (
-                                <tr>
-                                    <td colSpan="4" className="px-6 py-12 text-center text-slate-500">
-                                        <p>No payment history found.</p>
-                                    </td>
-                                </tr>
-                            )}
                         </tbody>
                     </table>
                 </div>
+
+                {/* Mobile Cards: History */}
+                <div className="md:hidden divide-y divide-slate-100">
+                    {payments.map((payment) => (
+                        <div key={payment.id} className="p-4 space-y-3">
+                            <div className="flex justify-between items-center">
+                                <div className="font-mono font-black text-emerald-600 text-lg">
+                                    <span>₹</span>{payment.amount}
+                                </div>
+                                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-black border uppercase tracking-wider ${payment.status === 'COMPLETED' || payment.status === 'PAID'
+                                    ? 'bg-emerald-50 text-emerald-700 border-emerald-100' :
+                                    payment.status === 'FAILED'
+                                        ? 'bg-red-50 text-red-700 border-red-100' :
+                                        'bg-amber-50 text-amber-700 border-amber-100'
+                                    }`}>
+                                    {payment.status}
+                                </span>
+                            </div>
+                            <div className="flex justify-between items-end">
+                                <div className="text-[10px] text-slate-400 font-bold flex items-center gap-1.5 uppercase">
+                                    <Calendar className="w-3 h-3" /> {new Date(payment.created_at).toLocaleDateString()}
+                                </div>
+                                <div className="text-[10px] font-mono text-slate-400 bg-slate-50 border border-slate-100 px-2 py-0.5 rounded">
+                                    ID: {payment.reference}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {payments.length === 0 && !loading && (
+                    <div className="px-6 py-12 text-center text-slate-500">
+                        <p>No payment history found.</p>
+                    </div>
+                )}
             </div>
 
             <DummyPaymentModal

@@ -119,16 +119,23 @@ const Profile = () => {
 
     return (
         <div className="space-y-6 max-w-4xl mx-auto pb-10 animate-fade-in">
-            <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-                <User className="text-blue-600 w-6 h-6" />
-                My Profile
-            </h1>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/50 p-6 rounded-2xl glass-card shadow-lg backdrop-blur-md border border-white/20 sticky top-0 z-20 w-full gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight flex items-center gap-3">
+                        <div className="p-2 bg-blue-100 rounded-lg">
+                            <User className="text-blue-600 w-8 h-8" />
+                        </div>
+                        My Profile
+                    </h1>
+                    <p className="text-slate-500 mt-1 ml-14 hidden sm:block">Manage your personal information and security settings.</p>
+                </div>
+            </div>
 
             {message.text && (
-                <div className={`p-4 rounded-lg flex items-center gap-3 shadow-sm ${message.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-red-50 text-red-700 border border-red-100'
+                <div className={`p-4 rounded-xl flex items-center gap-3 shadow-sm animate-slide-up ${message.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-100' : 'bg-red-50 text-red-700 border border-red-100'
                     }`}>
                     {message.type === 'success' ? <CheckCircle className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
-                    <span className="font-medium">{message.text}</span>
+                    <span className="font-bold text-sm tracking-tight">{message.text}</span>
                 </div>
             )}
 

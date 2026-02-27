@@ -259,16 +259,16 @@ const Dashboard = () => {
     return (
         <div className="space-y-8 pb-10">
             {/* ... Existing Student Layout ... */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white/50 p-6 rounded-2xl glass-card shadow-lg backdrop-blur-md border border-white/20 sticky top-0 md:top-0 z-20 w-full gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Overview</h1>
-                    <p className="text-slate-500 mt-1">Welcome back, {user?.username}.</p>
+                    <h1 className="text-3xl font-black text-slate-800 tracking-tight font-heading">Overview</h1>
+                    <p className="text-slate-500 mt-1 font-medium italic">Welcome back, {user?.username}.</p>
                 </div>
-                <div className="px-4 py-2 bg-white rounded-lg border border-slate-200 shadow-sm flex items-center gap-3">
+                <div className="px-4 py-2 bg-emerald-50 rounded-xl border border-emerald-100 shadow-sm flex items-center gap-3">
                     <span className="flex h-2.5 w-2.5 rounded-full bg-emerald-500 relative">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                     </span>
-                    <span className="text-sm font-medium text-slate-600">System Online</span>
+                    <span className="text-xs font-black text-emerald-700 uppercase tracking-widest leading-none">System Online</span>
                 </div>
             </div>
 
