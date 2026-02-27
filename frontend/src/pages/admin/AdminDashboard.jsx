@@ -125,7 +125,7 @@ const AdminDashboard = () => {
                     value={stats.active_issues}
                     icon={ClipboardList}
                     color="amber"
-                    link="/admin/issues"
+                    link="/issues"
                     trend="Current loans"
                 />
                 <StatCard

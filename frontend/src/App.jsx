@@ -71,7 +71,6 @@ function App() {
                             <Route path="/issues" element={<Issues />} />
                             <Route path="/reservations" element={<Reservations />} />
                             <Route path="/suggestions" element={<Suggestions />} />
-                            <Route path="/reviews" element={<ReviewModeration />} />
                             <Route path="/notifications" element={<Notifications />} />
                             <Route path="/profile" element={<Profile />} />
                             <Route path="/extensions" element={<Extensions />} />

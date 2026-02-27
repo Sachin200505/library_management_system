@@ -22,8 +22,9 @@ const Navbar = () => {
 
     const adminLinks = [
         { name: 'Manage Books', path: '/admin/books', icon: Book },
+        { name: 'Manage Users', path: '/admin/users', icon: User },
         { name: 'Requests', path: '/admin/requests', icon: History },
-        { name: 'Analytics', path: '/admin/analytics', icon: PieChart },
+        { name: 'Analytics', path: '/dashboard', icon: PieChart },
         { name: 'Reports', path: '/admin/reports', icon: FileText },
         { name: 'Fines', path: '/admin/fines', icon: DollarSign },
         { name: 'Extensions', path: '/admin/extensions', icon: Clock },

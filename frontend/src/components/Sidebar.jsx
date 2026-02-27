@@ -31,14 +31,13 @@ const Sidebar = () => {
         { name: 'Reservations', path: '/reservations', icon: Calendar },
         { name: 'Extensions', path: '/extensions', icon: Clock },
         { name: 'Fines', path: '/fines', icon: IndianRupee },
-        { name: 'Reviews', path: '/reviews', icon: MessageSquare },
         { name: 'Notifications', path: '/notifications', icon: Bell },
         { name: 'Suggestions', path: '/suggestions', icon: Lightbulb },
     ];
 
     const adminLinks = [
         { name: 'Manage Books', path: '/admin/books', icon: Book },
-        { name: 'Users', path: '/admin/users', icon: User },
+        { name: 'Manage Users', path: '/admin/users', icon: User },
         { name: 'Requests', path: '/admin/requests', icon: History },
         { name: 'Issued Books', path: '/issues', icon: History },
         { name: 'Fines', path: '/admin/fines', icon: IndianRupee },
