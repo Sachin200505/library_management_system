@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AnalyticsService from '../../services/analytics.service';
-import { Users, BookOpen, AlertCircle, IndianRupee, TrendingUp, Settings, Clock, ClipboardList, CheckCircle, ArrowUpRight } from 'lucide-react';
+import { Users, BookOpen, AlertCircle, IndianRupee, TrendingUp, Settings, Clock, ClipboardList, CheckCircle, ArrowUpRight, Shield, Lightbulb } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const StatCard = ({ title, value, icon: Icon, color, link, trend }) => (
     <Link to={link} className="block group">
@@ -27,6 +28,8 @@ const StatCard = ({ title, value, icon: Icon, color, link, trend }) => (
 );
 
 const AdminDashboard = () => {
+    const { user } = useAuth();
+    const isOwner = user?.profile?.is_owner;
     const [stats, setStats] = useState({
         active_users: 0,
         total_books: 0,
@@ -57,6 +60,21 @@ const AdminDashboard = () => {
         fetchData();
     }, []);
 
+    const quickActions = [
+        { to: "/admin/books", icon: BookOpen, color: "blue", title: "Manage Books", desc: "Edit & Delete books" },
+        { to: "/admin/users", icon: Users, color: "emerald", title: "Manage Users", desc: "Users & Permissions" },
+        { to: "/admin/requests", icon: ClipboardList, color: "indigo", title: "Issue Requests", desc: "Approve book loans" },
+        { to: "/admin/reviews", icon: AlertCircle, color: "orange", title: "Review Moderation", desc: "Review experience" },
+        { to: "/admin/extensions", icon: Clock, color: "yellow", title: "Extensions", desc: "Return date updates" },
+        { to: "/admin/suggestions", icon: Lightbulb, color: "pink", title: "Suggestions", desc: "New book ideas" },
+    ];
+
+    if (isOwner) {
+        quickActions.push({ to: "/owner/audit-logs", icon: Shield, color: "rose", title: "Audit Logs", desc: "Security & Tracker" });
+    }
+
+    quickActions.push({ to: "/admin/settings", icon: Settings, color: "purple", title: "Settings", desc: "System Config" });
+
     if (loading) return (
         <div className="flex justify-center items-center h-96">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-primary-500"></div>
@@ -67,7 +85,7 @@ const AdminDashboard = () => {
         <div className="space-y-8 animate-fade-in pb-10">
             <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                 <div>
-                    <h1 className="text-4xl font-black text-slate-800 font-heading tracking-tight">Admin Dashboard</h1>
+                    <h1 className="text-4xl font-black text-slate-800 font-heading tracking-tight">{isOwner ? 'Owner Dashboard' : 'Admin Dashboard'}</h1>
                     <p className="text-slate-500 mt-1 font-medium ml-1">Overview of library system performance and core metrics.</p>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
@@ -125,14 +143,7 @@ const AdminDashboard = () => {
                         Quick Actions
                     </h2>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {[
-                            { to: "/admin/books", icon: BookOpen, color: "blue", title: "Manage Books", desc: "Edit & Delete books" },
-                            { to: "/admin/reviews", icon: AlertCircle, color: "orange", title: "Review Moderation", desc: "Manage book reviews" },
-                            { to: "/admin/requests", icon: ClipboardList, color: "indigo", title: "Issue Requests", desc: "Approve book loans" },
-                            { to: "/admin/extensions", icon: Clock, color: "yellow", title: "Extension Requests", desc: "Review extensions" },
-                            { to: "/admin/suggestions", icon: BookOpen, color: "pink", title: "Book Suggestions", desc: "Review user ideas" },
-                            { to: "/admin/settings", icon: Settings, color: "purple", title: "Settings", desc: "Configure system" }
-                        ].map((action, idx) => (
+                        {quickActions.map((action, idx) => (
                             <Link key={idx} to={action.to} className="group p-4 bg-white border border-slate-100 rounded-2xl hover:border-primary-200 hover:shadow-md transition-all duration-300 flex flex-col items-start">
                                 <div className={`p-3 rounded-xl bg-${action.color}-50 text-${action.color}-600 mb-3 group-hover:scale-110 transition-transform`}>
                                     <action.icon className="w-6 h-6" />

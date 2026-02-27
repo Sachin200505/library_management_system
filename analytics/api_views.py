@@ -9,6 +9,7 @@ from books.models import Book
 from transactions.models import BookIssue, Fine
 from .models import AuditLog
 from .serializers import AuditLogSerializer
+from accounts.permissions import IsAdminOrOwner, IsOwner
 import datetime
 
 # Helper function to log actions
@@ -40,10 +41,6 @@ def log_action(user, action, details, request=None):
     except Exception as e:
         print(f"Failed to log action: {e}")
 
-class IsOwner(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return hasattr(request.user, 'profile') and request.user.profile.is_owner
-
 class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = AuditLog.objects.all()
     serializer_class = AuditLogSerializer
@@ -54,7 +51,7 @@ class AuditLogViewSet(viewsets.ReadOnlyModelViewSet):
         return AuditLog.objects.all().order_by('-timestamp')
 
 class DashboardViewSet(viewsets.ViewSet):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsAdminOrOwner]
 
     @action(detail=False, methods=['get'])
     def system_activity(self, request):

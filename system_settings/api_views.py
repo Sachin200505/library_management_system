@@ -1,8 +1,9 @@
 from rest_framework import viewsets, permissions
 from .models import Setting
 from .serializers import SettingSerializer
+from accounts.permissions import IsAdminOrOwner
 
 class SettingViewSet(viewsets.ModelViewSet):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsAdminOrOwner]
