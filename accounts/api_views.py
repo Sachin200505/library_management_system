@@ -39,26 +39,18 @@ class AuthViewSet(viewsets.GenericViewSet):
     @action(methods=['POST'], detail=False, authentication_classes=[], permission_classes=[permissions.AllowAny])
     @csrf_exempt
     def login(self, request):
-        print(f"DEBUG: Request Data: {request.data}", flush=True)
         username = request.data.get('username')
         password = request.data.get('password')
-        
-        print(f"Login attempt for: {username} / {password}")
-
-        # Debug logging to file
-        with open('login_debug.log', 'a') as f:
-            f.write(f"\n--- Login Attempt: {username} ---\n")
         
         # Check if login is via email
         if '@' in username:
             try:
                 user_obj = User.objects.get(email=username)
                 username = user_obj.username
-                with open('login_debug.log', 'a') as f:
-                    f.write(f"Resolved email to username: {username}\n")
+            try:
+                user_obj = User.objects.get(email=username)
+                username = user_obj.username
             except User.DoesNotExist:
-                with open('login_debug.log', 'a') as f:
-                    f.write("Email not found in database.\n")
                 pass
 
         user = authenticate(request, username=username, password=password, backend='django.contrib.auth.backends.ModelBackend')
@@ -66,12 +58,8 @@ class AuthViewSet(viewsets.GenericViewSet):
         if user:
             # Block login if user has no profile
             if not hasattr(user, 'profile'):
-                with open('login_debug.log', 'a') as f:
-                    f.write(f"Login rejected for {user.username}: No profile found.\n")
                 return Response({'detail': 'Account incomplete. Please contact support.'}, status=status.HTTP_403_FORBIDDEN)
 
-            with open('login_debug.log', 'a') as f:
-                f.write("Authentication successful.\n")
             login(request, user)
             
             # Log Action
@@ -79,8 +67,6 @@ class AuthViewSet(viewsets.GenericViewSet):
             
             return Response(UserSerializer(user, context={'request': request}).data)
         
-        with open('login_debug.log', 'a') as f:
-            f.write("Authentication failed (authenticate returned None).\n")
         return Response({'detail': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
     @action(methods=['POST'], detail=False)
@@ -95,8 +81,10 @@ class AuthViewSet(viewsets.GenericViewSet):
         from django.middleware.csrf import get_token
         return Response({'csrfToken': get_token(request)})
 
-    @action(methods=['GET'], detail=False, permission_classes=[permissions.IsAuthenticated])
+    @action(methods=['GET'], detail=False, permission_classes=[permissions.AllowAny])
     def me(self, request):
+        if not request.user.is_authenticated:
+            return Response({"authenticated": False}, status=status.HTTP_200_OK)
         return Response(UserSerializer(request.user, context={'request': request}).data)
 
     @action(methods=['POST'], detail=False, permission_classes=[permissions.AllowAny])
@@ -171,10 +159,7 @@ class AuthViewSet(viewsets.GenericViewSet):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-from .serializers import UserSerializer, UserProfileSerializer, RegisterSerializer, UserProfileUpdateSerializer
-from analytics.api_views import log_action
-
-# ... existing code ...
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = UserProfile.objects.all()

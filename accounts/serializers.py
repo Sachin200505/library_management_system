@@ -86,14 +86,6 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        with open('profile_update_debug.log', 'a') as f:
-            f.write(f"\n--- Profile Update for {instance.user.username} ---\n")
-            f.write(f"Validated keys: {list(validated_data.keys())}\n")
-            if 'avatar' in validated_data:
-                f.write(f"Avatar updated to: {validated_data['avatar']}\n")
-            else:
-                f.write("No avatar in validated data - keeping existing.\n")
-
         user_data = validated_data.pop('user', {})
         user = instance.user
 
