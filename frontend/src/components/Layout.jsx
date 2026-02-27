@@ -30,7 +30,10 @@ const Navbar = () => {
         { name: 'Settings', path: '/admin/settings', icon: Settings },
     ];
 
-    const links = user?.profile?.is_admin ? [...navLinks.filter(link => link.name !== 'Books'), ...adminLinks] : navLinks;
+    const isOwner = user?.profile?.is_owner;
+    const isAdmin = user?.profile?.is_admin;
+
+    const links = (isAdmin || isOwner) ? [...navLinks.filter(link => link.name !== 'Books'), ...adminLinks] : navLinks;
 
     return (
         <nav className="fixed md:hidden w-full z-40 bg-white border-b border-slate-200 top-0 left-0">

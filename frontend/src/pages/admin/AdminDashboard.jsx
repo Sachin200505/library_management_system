@@ -67,6 +67,9 @@ const AdminDashboard = () => {
         { to: "/admin/reviews", icon: AlertCircle, color: "orange", title: "Review Moderation", desc: "Review experience" },
         { to: "/admin/extensions", icon: Clock, color: "yellow", title: "Extensions", desc: "Return date updates" },
         { to: "/admin/suggestions", icon: Lightbulb, color: "pink", title: "Suggestions", desc: "New book ideas" },
+        { to: "/admin/reports", icon: FileText, color: "teal", title: "Reports", desc: "System analytics" },
+        { to: "/admin/fines", icon: IndianRupee, color: "green", title: "Fines", desc: "Payment records" },
+        { to: "/issues", icon: History, color: "slate", title: "Issued Books", desc: "Current loans" },
     ];
 
     if (isOwner) {
