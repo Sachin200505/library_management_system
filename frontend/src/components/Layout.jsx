@@ -66,15 +66,19 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden bg-white border-b border-slate-200">
                     <div className="px-4 pt-4 pb-6 space-y-2 h-[calc(100vh-4rem)] overflow-y-auto">
-                        <div className="flex items-center px-4 py-4 mb-4 border border-slate-100 bg-slate-50 rounded-lg">
-                            <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center border border-white shadow-sm mr-3">
-                                <User className="w-5 h-5 text-slate-500" />
+                        <Link
+                            to="/profile"
+                            onClick={() => setIsOpen(false)}
+                            className="flex items-center px-4 py-4 mb-4 border border-slate-100 bg-slate-50 rounded-lg hover:bg-white hover:border-blue-100 hover:shadow-sm transition-all group"
+                        >
+                            <div className="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center border border-white shadow-sm mr-3 group-hover:bg-blue-50 transition-colors">
+                                <User className="w-5 h-5 text-slate-500 group-hover:text-blue-600" />
                             </div>
                             <div>
-                                <p className="text-sm font-bold text-slate-900">{user?.username}</p>
+                                <p className="text-sm font-bold text-slate-900 group-hover:text-blue-700 transition-colors">{user?.username}</p>
                                 <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">{user?.profile?.role}</p>
                             </div>
-                        </div>
+                        </Link>
 
                         {links.map((link) => (
                             <Link
